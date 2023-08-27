@@ -5,12 +5,15 @@ import {UserInterface} from "../../../../common/interfaces/user.interface";
 import {AuthService} from "../../../../common/services/auth/auth.service";
 
 @Component({
-  selector: 'app-users-tab-content',
-  templateUrl: './users-tab-content.component.html',
-  styleUrls: ['./users-tab-content.component.css']
+  selector: 'app-group-channel-tab-content',
+  templateUrl: './group-channel-tab-content.component.html',
+  styleUrls: ['./group-channel-tab-content.component.css']
 })
-export class UsersTabContentComponent implements OnInit {
-  public userList = MockData.users;
+export class GroupChannelTabContentComponent implements OnInit {
+  public groupList = MockData.groups;
+  public channelList = MockData.channels;
+  public indexExpanded: number = -1;
+  public isExpand: boolean = false;
   public currentUser: UserInterface | undefined;
   public roles = UserRole;
 
@@ -18,5 +21,13 @@ export class UsersTabContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.currentUser;
+  }
+
+  public expandCard(index: number) {
+    if (this.indexExpanded === index) {
+      this.indexExpanded = -1;
+    } else {
+      this.indexExpanded = index;
+    }
   }
 }

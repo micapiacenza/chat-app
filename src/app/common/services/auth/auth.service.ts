@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserInterface} from "../../interfaces/user.interface";
-import {Roles} from "../../interfaces/roles";
 import {STORAGE_KEYS, StorageService} from "../storage/storage.service";
+import {MockData} from "../../seeder/mock-data";
 
 @Injectable({
   providedIn: 'root'
@@ -10,21 +10,8 @@ import {STORAGE_KEYS, StorageService} from "../storage/storage.service";
 
 export class AuthService {
   public user: UserInterface | undefined;
-  // Array fo dummy data
-  public users: Array<UserInterface> = [
-    {email: 'joe@email.com', pwd: 'qwerty', username: 'joe', groups: [], id: '1', role: Roles.superAdmin, rooms: []},
-    {email: 'mica@email.com', pwd: 'qwerty', username: 'mica', groups: [], id: '2', role: Roles.groupAdmin, rooms: []},
-    {email: 'tom@email.com', pwd: 'qwerty', username: 'tom', groups: [], id: '3', role: Roles.groupAssis, rooms: []},
-  ];
-  public currentUser: UserInterface = {
-    email: undefined,
-    groups: [],
-    id: undefined,
-    pwd: undefined,
-    role: Roles.groupAssis,
-    rooms: [],
-    username: undefined
-  }
+  public users: UserInterface[] = MockData.users;
+  public currentUser: UserInterface | undefined;
   public inputEmail: string = '';
   public isUserLoggedIn: boolean = false;
 
@@ -41,6 +28,8 @@ export class AuthService {
       if (this.users[i].email === this.inputEmail) {
         valid = true;
         this.isUserLoggedIn = true;
+        this.currentUser = this.users[i];
+        this.storageService.setItem(STORAGE_KEYS.currentUser, this.currentUser);
         this.router.navigate(['/main-chat']);
         break;
       }

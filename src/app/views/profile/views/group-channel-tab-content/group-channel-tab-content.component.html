@@ -1,17 +1,24 @@
-<div id="accordion" class="my-2 mx-2">
+<div class="my-3 mx-3">
+  <div class="row my-2">
+    <h5 class="col">Groups & Channels</h5>
+    <button type="button" class="btn btn-outline-info col-2 mx-1" routerLink="/create-group">New Group</button>
+    <button type="button" class="btn btn-outline-info col-2 mx-1" routerLink="/create-channel">New Channel</button>
+  </div>
+
   <!-- Group & Channel List -->
   <div *ngFor="let group of groupList; let i = index;" class="accordion my-2">
     <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
       <div (click)="expandCard(i)" class="col w-100 text-black" type="button">
         {{ group.name }}
       </div>
-      <div class="col-1 text-info"> {{ indexExpanded === i ? 'v' : '>' }} </div>
+      <div *ngIf="!roles.GroupAdmin" class="col-1 text-info"> X </div>
     </div>
 
-    <div *ngIf="indexExpanded === i" class="my-2 p-2 bg-white">
+    <div *ngIf="indexExpanded === i" class="my-2 p-2">
       <div *ngFor="let channel of channelList" class="accordion-body border-bottom">
         <div class="row">
           <div class="col">{{ channel.name }}</div>
+          <div *ngIf="!roles.GroupAdmin" class="col-1 text-info"> X </div>
         </div>
       </div>
     </div>

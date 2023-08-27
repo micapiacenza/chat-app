@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MockData} from "../../../../../common/seeder/mock-data";
 
 @Component({
   selector: 'app-expandable-group-card',
@@ -6,26 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./expandable-group-card.component.css']
 })
 export class ExpandableGroupCardComponent implements OnInit {
-  public groupList = [
-    'Group 1',
-    'Group 2',
-    'Group 3',
-    'Group 4',
-    'Group 5',
-  ];
-  public roomList = [
-    'Room 1',
-    'Room 2',
-    'Room 3',
-  ];
-  public indexExpanded: number= -1;
+  public groupList = MockData.groups;
+  public channelList = MockData.channels;
+  public indexExpanded: number = -1;
   public isExpand: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  public expandCard() {
-    this.isExpand = ! this.isExpand;
+  public expandCard(index: number) {
+    this.indexExpanded = (this.indexExpanded === index) ? -1 : index;
   }
 }

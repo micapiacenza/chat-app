@@ -1,5 +1,11 @@
-import {RoomInterface} from "./room.interface";
+import {ChannelInterface} from "./channel.interface";
+import {UserInterface} from "./user.interface";
 
 export interface GroupInterface {
-  rooms: RoomInterface[];
+  id: number;
+  name: string;
+  admins: UserInterface[];
+  channels: ChannelInterface[];
+  members: UserInterface[];
 }
+

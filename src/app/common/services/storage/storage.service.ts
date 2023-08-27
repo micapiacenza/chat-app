@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 export enum STORAGE_KEYS {
   groups = 'groups',
-  rooms = 'rooms',
+  channels = 'channels',
   users = 'users',
   currentUser = 'currentUser',
 }

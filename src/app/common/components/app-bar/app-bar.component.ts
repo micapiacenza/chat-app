@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
-import {UserInterface} from "../../interfaces/user.interface";
-import {Roles} from "../../interfaces/roles";
 
 @Component({
   selector: 'app-bar',
