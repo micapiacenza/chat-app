@@ -1,0 +1,19 @@
+<div id="accordion" class="my-2 mx-2">
+  <!--  Group & Room List-->
+  <div *ngFor="let groupList of groupList;" class="accordion my-2">
+    <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
+      <div (click)="expandCard()" class="col w-100 text-black" type="button">
+        {{groupList}}
+      </div>
+      <div class="col-1 text-info"> > </div>
+    </div>
+
+    <div *ngIf="isExpand" class="my-2 p-2 bg-white">
+      <div *ngFor="let roomList of roomList" class="accordion-body border-bottom">
+        <div class="row">
+          <div class="col">{{roomList}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

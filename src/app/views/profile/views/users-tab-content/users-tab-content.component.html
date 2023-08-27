@@ -1,0 +1,17 @@
+<div class="my-3 mx-3">
+  <div class="row my-2">
+    <h5 class="col">Users</h5>
+ </div>
+
+  <!--  Users List-->
+  <div *ngFor="let userList of userList" class="accordion-body">
+    <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
+      <div class="col">{{userList}}</div>
+      <small class="col-2 text-info"> Add to room </small>
+      <small class="col-2 text-info"> Add to group </small>
+      <small class="col-2 text-info"> Make assistant </small>
+      <small *ngIf="!roles.groupAssis && !roles.groupAdmin" class="col-2 text-info"> Make super admin </small>
+      <div *ngIf="!roles.groupAssis" class="col-1 text-info"> X </div>
+    </div>
+  </div>
+</div>

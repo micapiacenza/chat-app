@@ -1,0 +1,9 @@
+<div class="container my-4">
+  <div class="row">
+    <button (click)="showLoginForm()" class="btn btn-outline-info col mx-1">Login</button>
+    <button type="button" (click)="showCreateAccountForm()" class="btn btn-outline-info col mx-1">Signup</button>
+  </div>
+
+  <app-login *ngIf='login'></app-login>
+  <app-create-account *ngIf='signup'></app-create-account>
+</div>

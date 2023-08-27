@@ -1,0 +1,14 @@
+<div class="row">
+  <ul class="nav nav-tabs">
+    <li *ngFor="let tabList of tabList" class="nav-item col">
+      <a (click)="showTabContent(tabList)" class="nav-link active text-black" aria-current="page">{{tabList}}</a>
+    </li>
+  </ul>
+</div>
+
+<ng-container *ngIf="selectedTab === 'Groups & Rooms'">
+  <app-group-room-tab-content></app-group-room-tab-content>
+</ng-container>
+<ng-container *ngIf="selectedTab === 'Users'">
+  <app-users-tab-content></app-users-tab-content>
+</ng-container>

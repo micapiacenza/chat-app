@@ -1,0 +1,31 @@
+<!--User Profile Info -->
+<div class="container my-4">
+  <div class="row">
+    <div class="col">
+      <img src="./assets/images/profile-avatar.png" alt="user-avatar" class="img-size">
+    </div>
+    <div class="col-9">
+      <div class="row">
+        <p class="col-4 text-info">User Name: </p>
+        <p class="col-4">{{currentUser.username}}</p>
+      </div>
+      <div class="row">
+        <p class="col-4 text-info">Email: </p>
+        <p class="col-4">{{currentUser.email}}</p>
+      </div>
+      <div class="row">
+        <p class="col-4 text-info">Role: </p>
+        <p class="col-4">{{currentUser.role}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<!--Setting tab-->
+<div class="mx-3">
+  <h5 class="text-info">Settings</h5>
+  <app-profile-settings></app-profile-settings>
+</div>
+
