@@ -10,9 +10,10 @@ import { CreateAccountComponent } from './views/create-account/create-account.co
 import { MainChatComponent } from './views/main-chat/main-chat.component';
 import { ProfileComponent } from './views/profile/profile.component';
 import { HomeComponent } from './views/home/home.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MainChatModule} from "./views/main-chat/main-chat.module";
 import {ProfileModule} from "./views/profile/profile.module";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -23,15 +24,17 @@ import {ProfileModule} from "./views/profile/profile.module";
     ProfileComponent,
     HomeComponent,
   ],
-  imports: [
-    BrowserModule,
-    RouterModule,
-    AppRoutingModule,
-    AppBarModule,
-    FormsModule,
-    MainChatModule,
-    ProfileModule,
-  ],
+    imports: [
+        BrowserModule,
+        RouterModule,
+        AppRoutingModule,
+        AppBarModule,
+        FormsModule,
+        MainChatModule,
+        ProfileModule,
+        ReactiveFormsModule,
+        HttpClientModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "88b141d5-e83b-41d1-a1d8-c748aaaaf2cc",
+    "username": "micapiacenza",
+    "email": "micaela@email.com",
+    "password": "qwerty",
+    "roles": [
+      "SuperAdmin"
+    ]
+  },
+  {
+    "id": "63c5d299-49c9-4576-a5c0-b83540141a4e",
+    "username": "test",
+    "email": "test@email.com",
+    "password": "qwerty",
+    "roles": [
+      "SuperAdmin"
+    ]
+  }
+]

@@ -1,40 +1,39 @@
-<!-- Pills content -->
+<!-- Tabs content -->
 <div class="tab-content my-3">
   <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-    <form>
-      <!-- Name input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerName" class="form-control" />
-        <label class="form-label" for="registerName">Name</label>
-      </div>
-
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
       <!-- Username input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerUsername" class="form-control" />
+      <div class="form-group form-outline mb-4">
+        <input type="text" id="registerUsername" formControlName="username" class="form-control" />
         <label class="form-label" for="registerUsername">Username</label>
       </div>
 
       <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="registerEmail" class="form-control" />
+      <div class="form-group form-outline mb-4">
+        <input type="email" id="registerEmail" formControlName="email" class="form-control" />
         <label class="form-label" for="registerEmail">Email</label>
       </div>
 
       <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerPassword" class="form-control" />
+      <div class="form-group form-outline mb-4">
+        <input type="password" id="registerPassword" formControlName="password" class="form-control" />
         <label class="form-label" for="registerPassword">Password</label>
       </div>
 
-      <!-- Repeat Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerRepeatPassword" class="form-control" />
-        <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+      <div class="form-group">
+        <label for="selectedRole">Select Role</label>
+        <select id="selectedRole" formControlName="selectedRole" class="form-control" required>
+          <option value="" disabled>Select a role</option>
+          <option value="SuperAdmin">SuperAdmin</option>
+          <option value="GroupAdmin">GroupAdmin</option>
+          <option value="ChatUser">ChatUser</option>
+        </select>
       </div>
 
+      <div class="error-message py-2" *ngIf="errorMessage">{{ errorMessage }}</div>
+
       <!-- Submit button -->
-      <button type="submit" class="btn btn-info btn-block mb-3">Create Account</button>
+      <button type="submit" class="btn btn-info btn-block my-3">Create Account</button>
     </form>
   </div>
 </div>
-
