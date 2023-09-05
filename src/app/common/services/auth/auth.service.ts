@@ -14,14 +14,11 @@ export class AuthService {
   public users: UserInterface[] | undefined;
   public currentUser: UserInterface | undefined;
   public inputEmail: string = '';
-  public isUserLoggedIn: boolean = false;
   private baseUrl = 'http://localhost:3001';
 
   constructor(private router: Router, private storageService: StorageService, private http: HttpClient) {
     // If there is no data, it will generate dummy data
-    if (!this.storageService.getItem(STORAGE_KEYS.users)) {
-      this.storageService.setItem(STORAGE_KEYS.users, this.users);
-    }
+    this.users = this.storageService.getItem<UserInterface[]>(STORAGE_KEYS.users) || [];
   }
 
   public registerHttpRequest(userCredentials: {}) {
@@ -33,6 +30,7 @@ export class AuthService {
       (response) => {
         console.log('User registered successfully', response);
         this.router.navigate(['/main-chat']);
+        this.storageService.setItem(STORAGE_KEYS.currentUser, response);
       },
       (error) => {
         console.error('Error registering user', error);
@@ -49,14 +47,28 @@ export class AuthService {
   public loginUser(userCredentials: {}) {
     this.loginHttpRequest(userCredentials).subscribe(
       (response) => {
-        console.log('User login successfully', response);
         this.router.navigate(['/main-chat']);
+        this.storageService.setItem(STORAGE_KEYS.currentUser, response);
       },
       (error) => {
         console.error('Error login user', error);
       }
     );
     return this.loginHttpRequest(userCredentials);
+  }
+
+  isUserLoggedIn(): boolean {
+    const currentUser = this.storageService.getItem<UserInterface>(STORAGE_KEYS.currentUser);
+    return !!currentUser;
+  }
+
+  // Get the user from local storage
+  getCurrentUser(): UserInterface | undefined {
+    const storedUser = this.storageService.getItem<UserInterface>(STORAGE_KEYS.currentUser);
+    if (storedUser) {
+      return storedUser;
+    }
+    return undefined;
   }
 
   public logOut() {

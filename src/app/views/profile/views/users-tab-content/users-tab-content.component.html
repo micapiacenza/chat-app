@@ -10,8 +10,8 @@
       <small class="col-2 text-info"> Add to Channel </small>
       <small class="col-2 text-info"> Add to group </small>
       <small class="col-2 text-info"> Make assistant </small>
-      <small *ngIf="!roles.GroupAdmin" class="col-2 text-info"> Make super admin </small>
-      <div *ngIf="!roles.GroupAdmin" class="col-1 text-info"> X </div>
+      <small *ngIf="!roles.User" class="col-2 text-info"> Make super admin </small>
+      <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
     </div>
   </div>
 </div>

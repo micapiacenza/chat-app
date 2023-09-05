@@ -2,7 +2,7 @@
   <form>
     <div class="form-group my-4">
       <label class="my-1 font-weight-bold">Group Name</label>
-      <input type="name" class="form-control" placeholder="Enter group name">
+      <input type="text" id="groupName" [(ngModel)]="newGroupName" name="newGroupName" class="form-control" placeholder="Enter group name" required>
     </div>
     <div class="form-group my-4">
       <label class="my-1 font-weight-bold">Add Users</label>
@@ -12,8 +12,9 @@
           {{ user.username }}
         </label>
       </div>
+      <div class="error-message py-2" *ngIf="errorMessage">{{ errorMessage }}</div>
     </div>
-    <button type="submit" class="btn btn-outline-info my-3 w-100">Create New Group</button>
+    <button type="submit" class="btn btn-outline-info my-3 w-100" (click)="createGroup()">Create New Group</button>
     <button type="submit" class="btn btn-outline-info w-100">Cancel</button>
   </form>
 </div>

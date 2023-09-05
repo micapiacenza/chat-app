@@ -7,6 +7,7 @@ import { GroupChannelTabContentComponent } from './views/group-channel-tab-conte
 import { CreateGroupComponent } from './views/create-group/create-group.component';
 import { CreateChannelComponent } from './views/create-channel/create-channel.component';
 import {RouterModule} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,10 +17,11 @@ import {RouterModule} from "@angular/router";
      CreateGroupComponent,
      CreateChannelComponent
   ],
-  imports: [
-    BrowserModule,
-    RouterModule,
-  ],
+    imports: [
+        BrowserModule,
+        RouterModule,
+        FormsModule,
+    ],
   providers: [],
     exports: [
         ProfileSettingsComponent

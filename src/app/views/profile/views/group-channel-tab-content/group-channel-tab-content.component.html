@@ -11,14 +11,14 @@
       <div (click)="expandCard(i)" class="col w-100 text-black" type="button">
         {{ group.name }}
       </div>
-      <div *ngIf="!roles.GroupAdmin" class="col-1 text-info"> X </div>
+      <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
     </div>
 
     <div *ngIf="indexExpanded === i" class="my-2 p-2">
       <div *ngFor="let channel of channelList" class="accordion-body border-bottom">
         <div class="row">
           <div class="col">{{ channel.name }}</div>
-          <div *ngIf="!roles.GroupAdmin" class="col-1 text-info"> X </div>
+          <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
         </div>
       </div>
     </div>

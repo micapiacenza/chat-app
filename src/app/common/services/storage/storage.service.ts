@@ -14,15 +14,16 @@ export enum STORAGE_KEYS {
 export class StorageService {
 
 // Retrieve from local storage
-  public getItem(key: STORAGE_KEYS) {
+  public getItem<T>(key: STORAGE_KEYS): T | undefined {
     try {
-      return JSON.parse(window.localStorage.getItem(key) ?? '');
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : undefined;
     } catch {
       return undefined;
     }
   }
 
-//Set
+  // Set
   public setItem(key: STORAGE_KEYS, value: any) {
     window.localStorage.setItem(key, JSON.stringify(value));
   }

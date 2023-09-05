@@ -7,20 +7,23 @@ import {AuthService} from "../../services/auth/auth.service";
   styleUrls: ['./app-bar.component.css']
 })
 export class AppBarComponent implements OnInit {
+  isLoggedIn: boolean = false;
 
   constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
+    this.isUserLoggedIn();
   }
 
-  // Check if user is logged in
-  public isLogged(): boolean {
-    return this.auth.isUserLoggedIn;
+  isUserLoggedIn() {
+    this.isLoggedIn = this.auth.isUserLoggedIn();
+    console.log('navbar ngOnInit', this.isLoggedIn);
   }
 
   // Calls logout function
   public logOut() {
     this.auth.logOut();
+    this.isLoggedIn = false;
   }
 
 }
