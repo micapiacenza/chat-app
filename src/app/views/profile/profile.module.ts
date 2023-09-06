@@ -8,6 +8,7 @@ import { CreateGroupComponent } from './views/create-group/create-group.componen
 import { CreateChannelComponent } from './views/create-channel/create-channel.component';
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import { CreateUserComponent } from './views/create-user/create-user/create-user.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import {FormsModule} from "@angular/forms";
      UsersTabContentComponent,
      GroupChannelTabContentComponent,
      CreateGroupComponent,
-     CreateChannelComponent
+     CreateChannelComponent,
+     CreateUserComponent
   ],
     imports: [
         BrowserModule,

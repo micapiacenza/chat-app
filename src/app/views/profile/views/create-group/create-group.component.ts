@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {GroupService} from "../../../../common/services/busines-logic/group.service";
 import {Router} from "@angular/router";
+import {UserService} from "../../../../common/services/busines-logic/user.service";
 
 @Component({
   selector: 'app-create-group',
@@ -12,15 +13,19 @@ export class CreateGroupComponent implements OnInit {
   userList: any [] = [];
   errorMessage: string | undefined;
 
-  constructor(private groupService: GroupService, private router: Router) { }
+  constructor(private groupService: GroupService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
+    this.showUsersList()
   }
 
   createGroup() {
+    // Filter the userList to get only selected users
+    const selectedUsers = this.userList.filter(user => user.selected);
+
     const groupData = {
       name: this.newGroupName,
-      // TODO: Add list
+      members: selectedUsers,
     };
 
     // Call the createGroup method in the GroupService to create the group
@@ -32,9 +37,17 @@ export class CreateGroupComponent implements OnInit {
       },
       (error) => {
         console.error('Error creating group', error);
-        this.errorMessage = 'Registration failed. Please try again.';
+        this.errorMessage = 'Group creation failed. Please try again.';
       }
     );
+  }
+
+
+  showUsersList() {
+    this.userService.getAllUsers().subscribe((res)=>{
+      console.log('List of users:', res);
+      this.userList = res;
+    })
   }
 
 }

@@ -14,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MainChatModule} from "./views/main-chat/main-chat.module";
 import {ProfileModule} from "./views/profile/profile.module";
 import {HttpClientModule} from "@angular/common/http";
+import { DocumentationComponent } from './views/documentation/documentation/documentation.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import {HttpClientModule} from "@angular/common/http";
     MainChatComponent,
     ProfileComponent,
     HomeComponent,
+    DocumentationComponent,
   ],
     imports: [
         BrowserModule,

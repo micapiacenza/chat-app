@@ -7,6 +7,7 @@ import {ProfileComponent} from "./views/profile/profile.component";
 import {MainChatComponent} from "./views/main-chat/main-chat.component";
 import {CreateChannelComponent} from "./views/profile/views/create-channel/create-channel.component";
 import {CreateGroupComponent} from "./views/profile/views/create-group/create-group.component";
+import {CreateUserComponent} from "./views/profile/views/create-user/create-user/create-user.component";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'main-chat', component: MainChatComponent},
   {path: 'create-group', component: CreateGroupComponent},
   {path: 'create-channel', component: CreateChannelComponent},
+  {path: 'create-user', component: CreateUserComponent},
 ];
 
 @NgModule({
