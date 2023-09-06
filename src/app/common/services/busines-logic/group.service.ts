@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {STORAGE_KEYS, StorageService} from "../storage/storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import { Observable } from 'rxjs';
 export class GroupService {
   private baseUrl = 'http://localhost:3001/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private storageService: StorageService) {
+  }
 
   // Create a new group
   createGroup(groupData: any): Observable<any> {
@@ -18,6 +20,12 @@ export class GroupService {
   // Get all groups
   getAllGroups(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/groups`);
+  }
+
+  private saveGroupsToLocalStorage() {
+    this.getAllGroups().subscribe((res)=>{
+      this.storageService.setItem(STORAGE_KEYS.currentUser, res);
+    });
   }
 
   // Get a specific group by ID
@@ -31,7 +39,7 @@ export class GroupService {
   }
 
   // Delete a group by ID
-  deleteGroup(groupId: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${groupId}`);
+  deleteGroup(groupId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/groups/${groupId}`);
   }
 }

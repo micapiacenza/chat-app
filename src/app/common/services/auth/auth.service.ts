@@ -3,7 +3,12 @@ import {Router} from "@angular/router";
 import {UserInterface} from "../../interfaces/user.interface";
 import {STORAGE_KEYS, StorageService} from "../storage/storage.service";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {forkJoin, Observable, tap} from "rxjs";
+import {UserService} from "../busines-logic/user.service";
+import {GroupService} from "../busines-logic/group.service";
+import {ChannelService} from "../busines-logic/channels.service";
+import {GroupInterface} from "../../interfaces/group.interface";
+import {ChannelInterface} from "../../interfaces/channel.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +21,13 @@ export class AuthService {
   public inputEmail: string = '';
   private baseUrl = 'http://localhost:3001';
 
-  constructor(private router: Router, private storageService: StorageService, private http: HttpClient) {
+  constructor(private router: Router,
+              private storageService: StorageService,
+              private http: HttpClient,
+              private userService: UserService,
+              private groupService: GroupService,
+              private channelService: ChannelService,
+  ) {
     // If there is no data, it will generate dummy data
     this.users = this.storageService.getItem<UserInterface[]>(STORAGE_KEYS.users) || [];
   }
@@ -69,6 +80,30 @@ export class AuthService {
       return storedUser;
     }
     return undefined;
+  }
+
+  getRole(): string | undefined {
+    const currentUser = this.getCurrentUser();
+
+    if (currentUser) {
+      return currentUser.roles[0];
+    }
+
+    return undefined;
+  }
+
+  // Fetch and store user's groups and channels
+  fetchAndStoreGroupsAndChannels(): Observable<[GroupInterface[], ChannelInterface[]]> {
+    const groups$ = this.groupService.getAllGroups();
+    const channels$ = this.channelService.getAllChannels();
+
+    return forkJoin([groups$, channels$]).pipe(
+      tap(([groups, channels]) => {
+        // Store groups and channels in local storage
+        this.storageService.setItem(STORAGE_KEYS.groups, groups);
+        this.storageService.setItem(STORAGE_KEYS.channels, channels);
+      })
+    );
   }
 
   public logOut() {

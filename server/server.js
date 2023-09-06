@@ -119,7 +119,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-
 /**
  * ------------------------------------------------------------------------------------------------
  * Helpers
@@ -265,7 +264,7 @@ app.put('/api/groups/:groupId', (req, res) => {
 
 // CRUD API for deleting a group by ID
 app.delete('/api/groups/:groupId', (req, res) => {
-  const groupId = parseInt(req.params.groupId);
+  const groupId = req.params.groupId;
 
   const groupIndex = groupsData.findIndex(g => g.id === groupId);
 
@@ -339,7 +338,7 @@ app.put('/api/update-channel/:id', (req, res) => {
 
 // CRUD API for deleting a channel by ID
 app.delete('/api/delete-channel/:id', (req, res) => {
-  const channelId = parseInt(req.params.id);
+  const channelId = req.params.id;
 
   const channelIndex = channelsData.findIndex((channel) => channel.id === channelId);
   if (channelIndex === -1) {
@@ -357,17 +356,17 @@ app.delete('/api/delete-channel/:id', (req, res) => {
   });
 });
 
+
 /**
  * Models
  */
 class User {
-  constructor(id, username, email, password, roles, groups) {
+  constructor(id, username, email, password, roles) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.password = password;
     this.roles = roles;
-    this.groups = groups;
   }
 }
 
@@ -377,7 +376,7 @@ class Group {
     this.name = name;
     this.admins = admins;
     this.channels = channels;
-    this.members = members;
+    this.members = members; // Array of User objects
     this.pendingMembers = [];
   }
 }

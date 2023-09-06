@@ -1,8 +1,8 @@
 <div class="my-3 mx-3">
   <div class="row my-2">
     <h5 class="col">Groups & Channels</h5>
-    <button type="button" class="btn btn-outline-info col-2 mx-1" routerLink="/create-group">New Group</button>
-    <button type="button" class="btn btn-outline-info col-2 mx-1" routerLink="/create-channel">New Channel</button>
+    <button *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User" type="button" class="btn btn-outline-info col-2 mx-1" routerLink="/create-group">New Group</button>
+    <button *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User" type="button" class="btn btn-outline-info col-2 mx-1" routerLink="/create-channel">New Channel</button>
   </div>
 
   <!-- Group & Channel List -->
@@ -11,17 +11,17 @@
       <div (click)="expandCard(i)" class="col w-100 text-black" type="button">
         {{ groupDataItem.group.name }}
       </div>
-      <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
+      <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) === roles.User" class="col-2 btn text-info mx-1"> Register to Join </small>
+      <button *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User" (click)="deleteGroup(groupDataItem.group.id)" class="col-1 btn btn-info text-light"> X </button>
     </div>
 
     <div *ngIf="indexExpanded === i" class="my-2 p-2">
       <div *ngFor="let channel of groupDataItem.channels" class="accordion-body border-bottom">
         <div class="row">
           <div class="col">{{ channel.name }}</div>
-          <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
+          <button *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User" (click)="deleteChannel(channel.id)" class="col-1 btn btn-info text-light"> X </button>
         </div>
       </div>
     </div>
-
-</div>
+  </div>
 </div>

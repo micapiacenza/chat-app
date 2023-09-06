@@ -31,4 +31,14 @@ export class UsersTabContentComponent implements OnInit {
       }
     );
   }
+
+  mapUserRoleToEnum(userRoles: string[]): UserRole {
+    if (userRoles[0] === UserRole.SuperAdmin) {
+      return UserRole.SuperAdmin;
+    } else if (userRoles[0] === UserRole.GroupAdmin) {
+      return UserRole.GroupAdmin;
+    } else {
+      return UserRole.User;
+    }
+  }
 }
