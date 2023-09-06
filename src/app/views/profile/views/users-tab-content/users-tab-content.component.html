@@ -8,8 +8,8 @@
   <div *ngFor="let user of userList" class="accordion-body">
     <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
       <h6 class="col text-capitalize">{{ user.username }} - <small class="text-muted">{{user.roles[0]}}</small></h6>
-      <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User" class="col-2 btn text-info mx-1"> Add to Channel </small>
-      <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User" class="col-2 btn text-info mx-1"> Add to Group </small>
+      <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User && mapUserRoleToEnum(currentUser.roles) !== roles.GroupAdmin" class="col-2 btn text-info mx-1"> Add to Channel </small>
+      <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) !== roles.User && mapUserRoleToEnum(currentUser.roles) !== roles.GroupAdmin" class="col-2 btn text-info mx-1"> Add to Group </small>
       <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) === roles.SuperAdmin" class="col-2 btn text-info mx-1"> Make Group Admin </small>
       <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) === roles.SuperAdmin" class="col-2 btn text-info mx-1"> Make Super Admin </small>
       <small *ngIf="currentUser && mapUserRoleToEnum(currentUser.roles) === roles.User" class="col-2 btn text-info mx-1"> Leave Group </small>
