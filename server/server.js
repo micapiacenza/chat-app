@@ -213,9 +213,16 @@ app.post('/api/create-group', (req, res) => {
   if (groupsData.some(group => group.name === name)) {
     res.status(400).json({ success: false, message: 'Group name already exists' });
   } else {
-    // Create a new Group instance
-    const newGroup = new Group(groupsData.length + 1, name, admins, channels, members);
+    // Generate a unique ID for the new group
+    const groupId = generateUniqueId();
+
+    // Create a new Group instance with the generated ID
+    const newGroup = new Group(groupId, name, admins, channels, members);
+
+    // Add the new group to the data
     groupsData.push(newGroup);
+
+    // Update the groups data file
     fs.writeFileSync(groupsFilePath, JSON.stringify(groupsData, null, 2));
 
     res.json({ success: true, message: 'Group created successfully', group: newGroup });
@@ -280,15 +287,13 @@ app.listen(PORT, () => {
  * ------------------------------------------------------------------------------------------------
  * Channels
  */
-
 // CRUD API for creating a new channel
-app.post('/create-channel', (req, res) => {
-  const { name, groupId } = req.body;
-  if (!name || !groupId) {
-    return res.status(400).json({ message: 'Name and groupId are required fields.' });
-  }
+app.post('/api/create-channel', (req, res) => {
+  const { name, groups } = req.body;
+  const channelId = generateUniqueId();
+  const newChannel = new Channel(channelId, name, groups);
 
-  const newChannel = new Channel(generateUniqueId(), name, groupId);
+  newChannel.groupId = groups.map(group => group.id);
   channelsData.push(newChannel);
 
   fs.writeFile(channelsFilePath, JSON.stringify(channelsData), (err) => {
@@ -300,13 +305,14 @@ app.post('/create-channel', (req, res) => {
   });
 });
 
+
 // CRUD API for reading all channels
-app.get('/channels', (req, res) => {
+app.get('/api/channels', (req, res) => {
   res.json(channelsData);
 });
 
 // CRUD API for updating a channel by ID
-app.put('/update-channel/:id', (req, res) => {
+app.put('/api/update-channel/:id', (req, res) => {
   const channelId = parseInt(req.params.id);
   const { name, groupId } = req.body;
 
@@ -332,7 +338,7 @@ app.put('/update-channel/:id', (req, res) => {
 });
 
 // CRUD API for deleting a channel by ID
-app.delete('/delete-channel/:id', (req, res) => {
+app.delete('/api/delete-channel/:id', (req, res) => {
   const channelId = parseInt(req.params.id);
 
   const channelIndex = channelsData.findIndex((channel) => channel.id === channelId);

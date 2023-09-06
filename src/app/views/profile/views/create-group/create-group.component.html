@@ -13,9 +13,8 @@
         </label>
       </div>
     </div>
-
     <div class="error-message py-2" *ngIf="errorMessage">{{ errorMessage }}</div>
     <button type="submit" class="btn btn-outline-info my-3 w-100" (click)="createGroup()">Create New Group</button>
-    <button type="submit" class="btn btn-outline-info w-100">Cancel</button>
+    <button type="submit" class="btn btn-outline-info w-100" (click)="cancel()">Cancel</button>
   </form>
 </div>

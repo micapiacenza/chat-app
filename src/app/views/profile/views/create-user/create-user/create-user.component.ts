@@ -51,5 +51,8 @@ export class CreateUserComponent {
     );
   }
 
+  cancel(){
+    this.router.navigate(['/profile']);
+  }
 
 }

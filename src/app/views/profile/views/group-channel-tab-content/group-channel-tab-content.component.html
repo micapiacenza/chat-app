@@ -6,21 +6,22 @@
   </div>
 
   <!-- Group & Channel List -->
-  <div *ngFor="let group of groupList; let i = index;" class="accordion my-2">
+  <div *ngFor="let groupDataItem of groupData; let i = index;" class="accordion my-2">
     <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
       <div (click)="expandCard(i)" class="col w-100 text-black" type="button">
-        {{ group.name }}
+        {{ groupDataItem.group.name }}
       </div>
       <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
     </div>
 
     <div *ngIf="indexExpanded === i" class="my-2 p-2">
-      <div *ngFor="let channel of channelList" class="accordion-body border-bottom">
+      <div *ngFor="let channel of groupDataItem.channels" class="accordion-body border-bottom">
         <div class="row">
           <div class="col">{{ channel.name }}</div>
           <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
         </div>
       </div>
     </div>
-  </div>
+
+</div>
 </div>

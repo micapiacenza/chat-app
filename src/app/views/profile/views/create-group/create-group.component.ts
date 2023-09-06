@@ -50,4 +50,8 @@ export class CreateGroupComponent implements OnInit {
     })
   }
 
+  cancel(){
+    this.router.navigate(['/profile']);
+  }
+
 }
