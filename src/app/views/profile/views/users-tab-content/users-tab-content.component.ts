@@ -3,6 +3,7 @@ import { UserRole } from '../../../../common/enums/user-role.enum';
 import {UserInterface} from "../../../../common/interfaces/user.interface";
 import {AuthService} from "../../../../common/services/auth/auth.service";
 import {UserService} from "../../../../common/services/busines-logic/user.service";
+import {GroupService} from "../../../../common/services/busines-logic/group.service";
 
 @Component({
   selector: 'app-users-tab-content',
@@ -11,14 +12,18 @@ import {UserService} from "../../../../common/services/busines-logic/user.servic
 })
 export class UsersTabContentComponent implements OnInit {
   public userList: any [] = [];
+  public groupList: any[] = [];
   public currentUser: UserInterface | undefined;
   public roles = UserRole;
+  public showChannelSection = false;
+  public showGroupSection = false;
 
-  constructor(private authService: AuthService, private userService: UserService) {}
+  constructor(private authService: AuthService, private userService: UserService, private groupService: GroupService) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.loadUsers();
+    this.getAllGroups();
   }
 
   loadUsers() {
@@ -40,5 +45,19 @@ export class UsersTabContentComponent implements OnInit {
     } else {
       return UserRole.User;
     }
+  }
+
+  getAllGroups() {
+    this.groupService.getAllGroups().subscribe((groups: any[]) => {
+      this.groupList = groups;
+    });
+  }
+
+  openChannelSection() {
+    this.showChannelSection = !this.showChannelSection;
+  }
+
+  openGroupSection() {
+    this.showGroupSection = !this.showGroupSection;
   }
 }
