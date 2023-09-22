@@ -12,8 +12,8 @@
     <div *ngIf="user.role === roles.superAdmin">❗️ You can see all groups & rooms from the app.</div>
     <!--    Show for groupAdmin -->
     <div *ngIf="user.role === roles.groupAdmin">❗️ You can only see groups & rooms that you are an admin of.</div>
-    <!--    Show for groupAssis -->
-    <div *ngIf="user.role === roles.groupAssis">❗️ You can only see groups & rooms that you belong to.</div>
+    <!--    Show for groupAdmin -->
+    <div *ngIf="user.role === roles.groupAdmin">❗️ You can only see groups & rooms that you belong to.</div>
   </div>
 
   <!--  Group & Room List-->

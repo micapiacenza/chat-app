@@ -10,7 +10,7 @@
 <!--    Show for groupAdmin -->
     <div *ngIf="currentUser.role === roles.groupAdmin">❗️ You can only see users from groups & rooms that you are an admin of.</div>
 <!--    Show for groupAssis -->
-    <div *ngIf="currentUser.role === roles.groupAssis">❗️ You can only see users from groups & rooms that you belong to.</div>
+    <div *ngIf="currentUser.role === roles.groupAdmin">❗️ You can only see users from groups & rooms that you belong to.</div>
   </div>
 
   <!--  Users List-->
@@ -30,7 +30,7 @@
       <small (click)="assignRoleToUser(user._id, roles.groupAdmin)" *ngIf="currentUser.role === roles.superAdmin" class="col-2 text-info"> Make group admin </small>
 
       <!--    Show for superAdmin & groupAdmin only -->
-      <small *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" class="col-2 text-info" (click)="assignRoleToUser(user._id, roles.groupAssis)"> Make assistant </small>
+      <small *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" class="col-2 text-info" (click)="assignRoleToUser(user._id, roles.groupAdmin)"> Make assistant </small>
 
       <!--    Show for superAdmin only -->
 <!--      TODO: Add to be able to see users only to groups/rooms are admin assist, -->
