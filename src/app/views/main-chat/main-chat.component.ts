@@ -7,22 +7,23 @@ import {SocketioService} from "../../common/services/socket/socketio.service";
   styleUrls: ['./main-chat.component.css']
 })
 export class MainChatComponent implements OnInit {
-// @ts-ignore
-  public wss;
+  message: string = '';
+  messages: string[] = [];
 
-  constructor(private socketioService: SocketioService) {
-    socketioService.setupSocketConnection().then(ws => {
-      this.wss = ws;
+  constructor(private socketioService: SocketioService) {}
+
+  ngOnInit(): void {
+    this.socketioService.getMessages().subscribe((message: string) => {
+      console.log('Received message:', message);
+      this.messages.push(message);
     });
   }
 
-  ngOnInit(): void {
-  }
-
-  public pushMessage() {
-    // @ts-ignore
-    this.wss.send(JSON.stringify('alksjdflkajsdf'));
-    // this.wss.send(JSON.stringify({roomId: 'alksjdflkajsdf', userId:'aksdjfkajsdf', message:'', onEvent:'join'}));
+  sendMessage(): void {
+    if (this.message.trim() !== '') {
+      this.socketioService.sendMessage(this.message);
+      this.message = '';
+    }
   }
 
 

@@ -1,8 +1,10 @@
 const {Schema, model} = require('mongoose')
+const Roles = require('../roles/roles');
 
 const UserModel = {
     username: {
         required: true,
+        unique: true,
         type: String,
     },
     pwd: {
@@ -16,6 +18,7 @@ const UserModel = {
     role: {
         required: true,
         type: String,
+        enum: Object.values(Roles),
     },
 
 }

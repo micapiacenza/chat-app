@@ -8,8 +8,11 @@ const RoomModel = {
     users: {
         type: [Schema.Types.ObjectId],
         ref: 'User'
-    }
-
+    },
+  bannedUsers: {
+    type: [Schema.Types.ObjectId],
+    ref: 'User'
+  }
 }
 
 module.exports = model( 'Room', new Schema(RoomModel));

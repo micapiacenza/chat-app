@@ -29,6 +29,25 @@ const get_users_in_room = (roomId, users) => {
     return GroupModel.findByIdAndUpdate(users)
 }
 
+const promote_user_to_GroupAdmin = async (userId) => {
+  try {
+    // Check if the user exists and update their role to Group Admin
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { $push: { roles: 'Group Admin' } }, // Add 'Group Admin' role
+      { new: true } // Return the updated user
+    );
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 module.exports = {
     put_group,
@@ -36,5 +55,6 @@ module.exports = {
     group_list,
     delete_group,
     get_rooms_in_group,
-    get_users_in_room
+    get_users_in_room,
+    promote_user_to_GroupAdmin
 }

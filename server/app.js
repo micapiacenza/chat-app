@@ -6,7 +6,7 @@ const connectToMongoDB = require('./db');
 const cors = require('cors');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const sockets = require('./sockets');
+const sockets = require('./socket/sockets');
 
 const PORT = 3001;
 
