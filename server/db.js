@@ -1,10 +1,11 @@
 const { MongoClient } = require('mongodb');
 
-const uri = "mongodb+srv://micapiacenza:Micaela123@cluster0.f1dmgwa.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://micapiacenza:qwerty123@cluster0.wwjtkt2.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  tls: true,
 });
 
 // Export an async function that connects to MongoDB and returns the client
