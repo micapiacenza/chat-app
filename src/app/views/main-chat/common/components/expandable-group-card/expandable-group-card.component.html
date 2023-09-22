@@ -1,18 +1,17 @@
-<div id="accordion" class="my-2 mx-2">
-  <!-- Group & Channel List -->
-  <div *ngFor="let groupDataItem of groupData; let i = index;" class="accordion my-2">
+<div id="accordion" class="my-2 mx-2" *ngIf="currentUser() | async as user">
+  <!--  Group & Room List-->
+  <div *ngFor="let groupList of user.groups;" class="accordion my-2">
     <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
-      <div (click)="expandCard(i)" class="col w-100 text-black" type="button">
-        {{ groupDataItem.group.name }}
+      <div (click)="expandCard()" class="col w-100 text-black" type="button">
+        {{groupList | json}}
       </div>
-      <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
+      <div class="col-1 text-info"> > </div>
     </div>
 
-    <div *ngIf="indexExpanded === i" class="my-2 p-2">
-      <div *ngFor="let channel of groupDataItem.channels" class="accordion-body border-bottom">
+    <div *ngIf="isExpand" class="my-2 p-2 bg-white">
+      <div *ngFor="let roomList of user.rooms;" class="accordion-body border-bottom">
         <div class="row">
-          <div class="col">{{ channel.name }}</div>
-          <div *ngIf="!roles.User" class="col-1 text-info"> X </div>
+          <div class="col">{{roomList | json}}</div>
         </div>
       </div>
     </div>

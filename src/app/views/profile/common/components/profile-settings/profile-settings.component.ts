@@ -7,14 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileSettingsComponent implements OnInit {
   selectedTab: any;
-  tabList = ['Groups & Channels', 'Users'];
+  tabList = ['Groups & Rooms', 'Users'];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
-  // Show content of selected tab
+  /**
+   * Show content of selected tab
+   * @param tabList
+   */
   public showTabContent(tabList: any) {
     this.selectedTab = tabList;
   };

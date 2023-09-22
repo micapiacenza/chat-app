@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { UserRole } from '../../../../common/enums/user-role.enum';
-import {UserInterface} from "../../../../common/interfaces/user.interface";
+import {Component, OnInit} from '@angular/core';
+import {Roles} from "../../../../common/interfaces/roles";
 import {AuthService} from "../../../../common/services/auth/auth.service";
-import {UserService} from "../../../../common/services/busines-logic/user.service";
-import {GroupService} from "../../../../common/services/busines-logic/group.service";
+import {STORAGE_KEYS, StorageService} from "../../../../common/services/storage/storage.service";
+import {UserService} from "../../../../common/services/user/user.service";
+import {map, Observable} from "rxjs";
 
 @Component({
   selector: 'app-users-tab-content',
@@ -11,53 +11,57 @@ import {GroupService} from "../../../../common/services/busines-logic/group.serv
   styleUrls: ['./users-tab-content.component.css']
 })
 export class UsersTabContentComponent implements OnInit {
-  public userList: any [] = [];
-  public groupList: any[] = [];
-  public currentUser: UserInterface | undefined;
-  public roles = UserRole;
-  public showChannelSection = false;
-  public showGroupSection = false;
+  public roles = Roles;
+  public assignRoleObservable: Observable<any> | undefined;
+  public users: Observable<any> | undefined;
 
-  constructor(private authService: AuthService, private userService: UserService, private groupService: GroupService) {}
+  constructor(private auth: AuthService, private storageService: StorageService, private userService: UserService) {
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    this.loadUsers();
-    this.getAllGroups();
+    this.users = this.getAllUsers();
   }
 
-  loadUsers() {
-    this.userService.getAllUsers().subscribe(
-      (data) => {
-        this.userList = data;
-      },
-      (error) => {
-        console.error('Error loading users', error);
-      }
-    );
+  /**
+   * Get all users
+   */
+  public getAllUsers(): Observable<any> {
+    return this.userService.listUsers();
   }
 
-  mapUserRoleToEnum(userRoles: string[]): UserRole {
-    if (userRoles[0] === UserRole.SuperAdmin) {
-      return UserRole.SuperAdmin;
-    } else if (userRoles[0] === UserRole.GroupAdmin) {
-      return UserRole.GroupAdmin;
-    } else {
-      return UserRole.User;
-    }
+  /**
+   * Create User
+   */
+  public createUser(body: any): Observable<any> {
+    return this.userService.createUser(body);
   }
 
-  getAllGroups() {
-    this.groupService.getAllGroups().subscribe((groups: any[]) => {
-      this.groupList = groups;
-    });
+  /**
+   * Get User
+   */
+  public getUser(id: string): Observable<any>  {
+    return this.userService.getUserById(id);
   }
 
-  openChannelSection() {
-    this.showChannelSection = !this.showChannelSection;
+  /**
+   * Assign user to a role
+   */
+  public assignRoleToUser(id: string, role: string): void {
+    this.assignRoleObservable = this.userService.assignRole(id, role);
   }
 
-  openGroupSection() {
-    this.showGroupSection = !this.showGroupSection;
+  /**
+   * Delete User
+   */
+  public deleteUser(id: string): Observable<any>  {
+    return this.userService.deleteUser(id);
   }
+
+  /**
+   * Get current user from AuthService
+   */
+  public currentUser() {
+    return this.auth.getCurrentUser();
+  }
+
 }

@@ -1,11 +1,6 @@
-import {ChannelInterface} from "./channel.interface";
-import {UserInterface} from "./user.interface";
+import {RoomInterface} from "./room.interface";
 
 export interface GroupInterface {
-  id: number;
-  name: string;
-  admins: UserInterface[];
-  channels: ChannelInterface[];
-  members: UserInterface[];
+  groupName: string | undefined;
+  rooms: RoomInterface[];
 }
-

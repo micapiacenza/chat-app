@@ -1,23 +1,22 @@
 <!--User Profile Info -->
-<div class="container my-4">
+<div class="container my-4" *ngIf="currentUser() | async as user">
   <div class="row">
     <div class="col">
-      <img src="./assets/images/profile-avatar.png" alt="user-avatar" class="img-size">
+      <img src="../../../assets/images/profile-avatar.png" alt="user-avatar" class="img-size">
     </div>
     <div class="col-9">
       <div class="row">
         <p class="col-4 text-info">User Name: </p>
-        <p class="col-4">{{currentUser?.username}}</p>
+        <p class="col-4">{{user.username}}</p>
       </div>
       <div class="row">
         <p class="col-4 text-info">Email: </p>
-        <p class="col-4">{{currentUser?.email}}</p>
+        <p class="col-4">{{user.email}}</p>
       </div>
       <div class="row">
         <p class="col-4 text-info">Role: </p>
-        <p class="col-4">{{currentUser?.roles}}</p>
+        <p class="col-4">{{user.role}}</p>
       </div>
-
     </div>
   </div>
 </div>

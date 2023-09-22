@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {UserInterface} from "../../common/interfaces/user.interface";
-import {UserRole} from "../../common/enums/user-role.enum";
+import {Component, OnInit} from '@angular/core';
+import {Roles} from "../../common/interfaces/roles";
 import {AuthService} from "../../common/services/auth/auth.service";
 
 @Component({
@@ -8,14 +7,16 @@ import {AuthService} from "../../common/services/auth/auth.service";
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-
 export class ProfileComponent implements OnInit {
-  public currentUser: UserInterface | undefined;
-  public roles = UserRole;
 
-  constructor(private authService: AuthService) {}
+  constructor(private auth: AuthService) {
+  }
+
+  public currentUser() {
+    return this.auth.getCurrentUser();
+  }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
   }
+
 }

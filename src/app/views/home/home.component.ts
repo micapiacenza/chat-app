@@ -18,12 +18,14 @@ export class HomeComponent implements OnInit {
     this.activeButton = true;
     this.login = true;
     this.signup = false;
+    console.log("I have been clicked");
   }
 
   public showCreateAccountForm(): void {
     this.activeButton = true;
     this.signup = true;
     this.login = false;
+    console.log("I have been clicked");
   }
 
 }

@@ -1,114 +1,119 @@
 import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserInterface} from "../../interfaces/user.interface";
+import {Roles} from "../../interfaces/roles";
 import {STORAGE_KEYS, StorageService} from "../storage/storage.service";
-import {HttpClient} from "@angular/common/http";
-import {forkJoin, Observable, tap} from "rxjs";
-import {UserService} from "../busines-logic/user.service";
-import {GroupService} from "../busines-logic/group.service";
-import {ChannelService} from "../busines-logic/channels.service";
-import {GroupInterface} from "../../interfaces/group.interface";
-import {ChannelInterface} from "../../interfaces/channel.interface";
+import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
-  public user: UserInterface | undefined;
-  public users: UserInterface[] | undefined;
-  public currentUser: UserInterface | undefined;
+  // Users mock data
+  public users: Array<UserInterface> = [
+    // User 1
+    {email: 'joe@email.com', pwd: 'qwerty', username: 'Joe', groups: [
+      {groupName: 'Group A', rooms: [{usersIds: ['1', '2', '3']}]},
+      {groupName: 'Group B', rooms: [{usersIds: ['1', '2', '3']}]},
+      ], id: '1', role: Roles.superAdmin, rooms: []},
+    // User 2
+    {email: 'mica@email.com', pwd: 'qwerty', username: 'Mica', groups: [
+      {groupName: 'Group C', rooms: [{usersIds: ['4', '5', '6']}]},
+      {groupName: 'Group D', rooms: [{usersIds: ['4', '5', '6']}]},
+      {groupName: 'Group E', rooms: [{usersIds: ['4', '5', '6']}]},
+      ], id: '2', role: Roles.groupAdmin, rooms: []},
+    // User 3
+    {email: 'tom@email.com', pwd: 'qwerty', username: 'Tom', groups: [
+      {groupName: 'Group F', rooms: [{usersIds: ['7', '8', '1']}]},
+      {groupName: 'Group G', rooms: [{usersIds: ['7', '8', '1']}]},
+      ], id: '3', role: Roles.groupAssis, rooms: []},
+    // User 4
+    {email: 'sara@email.com', pwd: 'qwerty', username: 'Sara', groups: [
+      {groupName: 'Group H', rooms: [{usersIds: ['2', '3']}]},
+      ], id: '4', role: Roles.regularUser, rooms: []},
+    // User 5
+    {email: 'dave@email.com', pwd: 'qwerty', username: 'Dave', groups: [
+      {groupName: 'Group I', rooms: [{usersIds: ['1', '2', '3', '7']}]},
+      {groupName: 'Group J', rooms: [{usersIds: ['1', '2', '3', '7']}]},
+      ], id: '5', role: Roles.regularUser, rooms: []},
+    // User 6
+    {email: 'peter@email.com', pwd: 'qwerty', username: 'Peter', groups: [
+      {groupName: 'Group K', rooms: [{usersIds: ['5', '3', '8', '6']}]}
+      ], id: '6', role: Roles.regularUser, rooms: []},
+    // User 7
+    {email: 'nicky@email.com', pwd: 'qwerty', username: 'Nicky', groups: [
+      {groupName: 'Group L', rooms: [{usersIds: ['1', '2', '8']}]}
+      ], id: '7', role: Roles.regularUser, rooms: []},
+    // User 8
+    {email: 'jess@email.com', pwd: 'qwerty', username: 'Jess', groups: [
+      {groupName: 'Group M', rooms: [{usersIds: ['8', '7', '3']}]},
+      ], id: '8', role: Roles.regularUser, rooms: []},
+  ];
+
   public inputEmail: string = '';
-  private baseUrl = 'http://localhost:3001';
+  public isUserLoggedIn: boolean = false;
+  // Subject that emits the last value emitted by the source Observable
+  public currentUser: BehaviorSubject<UserInterface | null> = new BehaviorSubject<UserInterface | null>(null);
 
-  constructor(private router: Router,
-              private storageService: StorageService,
-              private http: HttpClient,
-              private userService: UserService,
-              private groupService: GroupService,
-              private channelService: ChannelService,
-  ) {
-    // If there is no data, it will generate dummy data
-    this.users = this.storageService.getItem<UserInterface[]>(STORAGE_KEYS.users) || [];
-  }
-
-  public registerHttpRequest(userCredentials: {}) {
-    return this.http.post(`${this.baseUrl}/api/register`, userCredentials);
-  }
-
-  public registerUser(userCredentials: {}) {
-    this.registerHttpRequest(userCredentials).subscribe(
-      (response) => {
-        console.log('User registered successfully', response);
-        this.router.navigate(['/main-chat']);
-        this.storageService.setItem(STORAGE_KEYS.currentUser, response);
-      },
-      (error) => {
-        console.error('Error registering user', error);
-        // Handle errors and show error messages
-      }
-    );
-    return this.registerHttpRequest(userCredentials);
-  }
-
-  public loginHttpRequest(credentials: {}): Observable<any> {
-    return this.http.post(`${this.baseUrl}/api/login`, credentials);
-  }
-
-  public loginUser(userCredentials: {}) {
-    this.loginHttpRequest(userCredentials).subscribe(
-      (response) => {
-        this.router.navigate(['/main-chat']);
-        this.storageService.setItem(STORAGE_KEYS.currentUser, response);
-      },
-      (error) => {
-        console.error('Error login user', error);
-      }
-    );
-    return this.loginHttpRequest(userCredentials);
-  }
-
-  isUserLoggedIn(): boolean {
-    const currentUser = this.storageService.getItem<UserInterface>(STORAGE_KEYS.currentUser);
-    return !!currentUser;
-  }
-
-  // Get the user from local storage
-  getCurrentUser(): UserInterface | undefined {
-    const storedUser = this.storageService.getItem<UserInterface>(STORAGE_KEYS.currentUser);
-    if (storedUser) {
-      return storedUser;
+  constructor(private router: Router, private storageService: StorageService) {
+    // If there is no data, it will generate mock data
+    if (!this.storageService.getItem(STORAGE_KEYS.users)) {
+      this.storageService.setItem(STORAGE_KEYS.users, this.users);
     }
-    return undefined;
   }
 
-  getRole(): string | undefined {
-    const currentUser = this.getCurrentUser();
+  /**
+   * Gets logged in user as current user
+   */
+  public getCurrentUser(): Observable<UserInterface | null> {
+    return this.currentUser.asObservable();
+  }
 
-    if (currentUser) {
-      return currentUser.roles[0];
+  /**
+   * Validates user session
+   */
+  public validateToken() {
+    if (this.storageService.getItem(STORAGE_KEYS.currentUser)){
+      this.userAuth();
     }
-
-    return undefined;
   }
 
-  // Fetch and store user's groups and channels
-  fetchAndStoreGroupsAndChannels(): Observable<[GroupInterface[], ChannelInterface[]]> {
-    const groups$ = this.groupService.getAllGroups();
-    const channels$ = this.channelService.getAllChannels();
-
-    return forkJoin([groups$, channels$]).pipe(
-      tap(([groups, channels]) => {
-        // Store groups and channels in local storage
-        this.storageService.setItem(STORAGE_KEYS.groups, groups);
-        this.storageService.setItem(STORAGE_KEYS.channels, channels);
-      })
-    );
+  /**
+   * Sets logged in user as current user
+   * @param val
+   */
+  public setCurrentUser(val: UserInterface): void {
+    this.currentUser.next(val)
   }
 
-  public logOut() {
+  /**
+   * User authentication
+   */
+  public userAuth(): void {
+    let valid = false;
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].email === this.inputEmail) {
+        valid = true;
+        this.isUserLoggedIn = true;
+        this.setCurrentUser(this.users[i]);
+        this.router.navigate(['/main-chat']);
+        break;
+      }
+    }
+    if (!valid) {
+      this.isUserLoggedIn = false;
+      alert('Error: The user entered does not match any existing user');
+    }
+  }
+
+  /**
+   * User log out
+   */
+  public logOut(): void {
     this.storageService.setItem(STORAGE_KEYS.currentUser, undefined);
-    this.router.navigate(['/']);
+    void this.router.navigate(['/']);
+    this.currentUser.next(null);
   }
 
 }

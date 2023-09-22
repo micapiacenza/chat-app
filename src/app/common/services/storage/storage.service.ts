@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 export enum STORAGE_KEYS {
   groups = 'groups',
-  channels = 'channels',
+  rooms = 'rooms',
   users = 'users',
   currentUser = 'currentUser',
 }
@@ -13,19 +13,36 @@ export enum STORAGE_KEYS {
 
 export class StorageService {
 
-// Retrieve from local storage
-  public getItem<T>(key: STORAGE_KEYS): T | undefined {
+  /**
+   * Retrieve from local storage
+   */
+  public getItem(key: STORAGE_KEYS) {
     try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : undefined;
+      return JSON.parse(window.localStorage.getItem(key) ?? '');
     } catch {
       return undefined;
     }
   }
 
-  // Set
+  /**
+   * Set item in local storage
+   */
   public setItem(key: STORAGE_KEYS, value: any) {
     window.localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  /**
+   * Assign user to a group and save it in local storage
+   */
+  public assignToGroup(group: any) {
+    this.setItem(STORAGE_KEYS.groups, group);
+  }
+
+  /**
+   * Assign user to a room and save it in local storage
+   */
+  public assignToRoom(room: any) {
+    this.setItem(STORAGE_KEYS.rooms, room);
   }
 }
 

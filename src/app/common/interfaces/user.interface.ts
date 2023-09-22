@@ -1,12 +1,14 @@
-import {UserRole} from "../enums/user-role.enum";
+import {Roles} from "./roles";
 import {GroupInterface} from "./group.interface";
+import {RoomInterface} from "./room.interface";
 
 export interface UserInterface {
-  id: number;
-  username: string;
-  email: string;
-  pwd: string;
-  roles: UserRole[];
+  username: string | undefined;
+  pwd: string | undefined;
+  email: string | undefined;
+  id: string | undefined;
+  role: Roles;
   groups: GroupInterface[];
+  rooms: RoomInterface[];
 }
 

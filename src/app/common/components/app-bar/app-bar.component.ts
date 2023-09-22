@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
+import {UserInterface} from "../../interfaces/user.interface";
+import {Roles} from "../../interfaces/roles";
 
 @Component({
   selector: 'app-bar',
@@ -7,23 +9,20 @@ import {AuthService} from "../../services/auth/auth.service";
   styleUrls: ['./app-bar.component.css']
 })
 export class AppBarComponent implements OnInit {
-  isLoggedIn: boolean = false;
 
   constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
-    this.isUserLoggedIn();
   }
 
-  isUserLoggedIn() {
-    this.isLoggedIn = this.auth.isUserLoggedIn();
-    console.log('navbar ngOnInit', this.isLoggedIn);
+  // Check if user is logged in
+  public isLogged(): boolean {
+    return this.auth.isUserLoggedIn;
   }
 
   // Calls logout function
   public logOut() {
     this.auth.logOut();
-    this.isLoggedIn = false;
   }
 
 }
