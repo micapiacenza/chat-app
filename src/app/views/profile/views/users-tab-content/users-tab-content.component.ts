@@ -15,6 +15,7 @@ export class UsersTabContentComponent implements OnInit {
   public assignRoleObservable: Observable<any> | undefined;
   public users: Observable<any> | undefined;
 
+
   constructor(private auth: AuthService, private storageService: StorageService, private userService: UserService) {
   }
 
@@ -27,13 +28,6 @@ export class UsersTabContentComponent implements OnInit {
    */
   public getAllUsers(): Observable<any> {
     return this.userService.listUsers();
-  }
-
-  /**
-   * Create User
-   */
-  public createUser(body: any): Observable<any> {
-    return this.userService.createUser(body);
   }
 
   /**
@@ -53,8 +47,18 @@ export class UsersTabContentComponent implements OnInit {
   /**
    * Delete User
    */
-  public deleteUser(id: string): Observable<any>  {
-    return this.userService.deleteUser(id);
+  public deleteUser(id: string): void {
+    this.userService.deleteUser(id).subscribe(
+      (response) => {
+        // User deletion was successful, handle any additional logic here
+        console.log('User deleted successfully', response);
+        window.location.reload();
+      },
+      (error) => {
+        // Handle errors, e.g., display an error message
+        console.error('Error deleting user', error);
+      }
+    );
   }
 
   /**
@@ -64,4 +68,19 @@ export class UsersTabContentComponent implements OnInit {
     return this.auth.getCurrentUser();
   }
 
+  addToGroup(_id: any) {
+
+  }
+
+  addToRoom(_id: any) {
+
+  }
+
+  banAndReportUser(_id: any) {
+
+  }
+
+  banUser(_id: any) {
+
+  }
 }

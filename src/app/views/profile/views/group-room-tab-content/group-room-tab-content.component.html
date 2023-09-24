@@ -16,22 +16,22 @@
     <div *ngIf="user.role === roles.groupAdmin">❗️ You can only see groups & rooms that you belong to.</div>
   </div>
 
-  <!--  Group & Room List-->
-  <div *ngFor="let group of groups | async" class="accordion my-2">
+  <!-- Group & Room List-->
+  <div *ngFor="let group of groups | async; let i = index" class="accordion my-2">
     <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
-      <div (click)="expandCard()" class="col w-100 text-black" type="button">
-        {{groups | json}}
+      <div (click)="expandCard(i)" class="col w-100 text-black" type="button">
+        {{ group.name }}
       </div>
-<!--      Show to superAdmin & groupAdmin -->
-      <div *ngIf="user.role === roles.superAdmin || roles.groupAdmin" class="col-1 text-info"> X </div>
+      <!-- Show to superAdmin & groupAdmin -->
+      <button *ngIf="user.role === roles.superAdmin || roles.groupAdmin" class="col-1 p-1 m-1 btn btn-info text-light" (click)="deleteGroup(group._id)"> X </button>
     </div>
 
-    <div *ngIf="isExpand" class="my-2 p-2">
-      <div *ngFor="let room of rooms | async" class="accordion-body border-bottom">
+    <div *ngIf="isExpand[i]" class="my-2 p-2">
+      <div *ngFor="let room of groupedRooms[group._id]" class="accordion-body border-bottom">
         <div class="row">
-          <div class="col">{{room | json}}</div>
-<!--      Show to superAdmin & groupAdmin -->
-          <div *ngIf="user.role === roles.superAdmin || roles.groupAdmin" class="col-1 text-info"> X </div>
+          <div class="col">{{ room.name }}</div>
+          <!-- Show to superAdmin & groupAdmin -->
+          <button *ngIf="user.role === roles.superAdmin || roles.groupAdmin" class="col-1 p-1 m-1 btn btn-info text-light" (click)="deleteRoom(room._id)"> X </button>
         </div>
       </div>
     </div>

@@ -1,13 +1,22 @@
 const RoomModel = require('./room.model');
 const UserModel = require('../user/user.model');
+const GroupModel = require('../group/group.model');
 
-const put_room = async (name) => {
+const put_room = async (name, groupId) => {
   try {
-    return await RoomModel.create({ name });
+    const createdRoom = await RoomModel.create({ name, groupId });
+
+    // Update the corresponding group document
+    await GroupModel.findByIdAndUpdate(groupId, {
+      $push: { rooms: createdRoom._id }
+    });
+
+    return createdRoom;
   } catch (error) {
     throw error;
   }
 };
+
 
 const list_rooms = () => {
   return RoomModel.find();
@@ -81,30 +90,6 @@ const remove_user_from_room = async (roomId, userId) => {
   }
 };
 
-const ban_user_from_channel_and_report = async (roomId, userId, adminUserId) => {
-  try {
-    const room = await RoomModel.findById(roomId);
-
-    if (!room) {
-      throw new Error('Room not found');
-    }
-
-    // Check if the user exists and update the room to ban the user
-    const user = await UserModel.findById(userId);
-    if (user) {
-      room.bannedUsers.push(userId);
-      await room.save();
-    }
-
-    // Report the incident to Super Admins
-    // TODO: need to implement the logic to notify Super Admins here
-
-    return room;
-  } catch (error) {
-    throw error;
-  }
-};
-
 module.exports = {
   put_room,
   list_rooms,
@@ -113,5 +98,4 @@ module.exports = {
   get_users_room,
   add_users_to_room,
   remove_user_from_room,
-  ban_user_from_channel_and_report,
 };

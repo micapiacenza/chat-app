@@ -20,6 +20,8 @@ import {
   GroupRoomTabContentComponent
 } from "./views/profile/views/group-room-tab-content/group-room-tab-content.component";
 import {UsersTabContentComponent} from "./views/profile/views/users-tab-content/users-tab-content.component";
+import {CreateGroupComponent} from "./views/profile/views/create-group/create-group.component";
+import {CreateRoomComponent} from "./views/profile/views/create-room/create-room.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import {UsersTabContentComponent} from "./views/profile/views/users-tab-content/
     ExpandableGroupCardComponent,
     GroupRoomTabContentComponent,
     UsersTabContentComponent,
-    ProfileSettingsComponent
+    ProfileSettingsComponent,
+    CreateGroupComponent,
+    CreateRoomComponent
   ],
   imports: [
     BrowserModule,

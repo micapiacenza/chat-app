@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile-settings.component.css']
 })
 export class ProfileSettingsComponent implements OnInit {
-  selectedTab: any;
+  selectedTab: any = 'Groups & Rooms';
   tabList = ['Groups & Rooms', 'Users'];
 
   constructor() {

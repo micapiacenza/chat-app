@@ -56,5 +56,7 @@ module.exports = {
     delete_group,
     get_rooms_in_group,
     get_users_in_room,
-    promote_user_to_GroupAdmin
+    promote_user_to_GroupAdmin,
+  // ban_user_from_group_and_report,
+  // send_join_request,
 }

@@ -9,10 +9,10 @@ const RoomModel = {
         type: [Schema.Types.ObjectId],
         ref: 'User'
     },
-  bannedUsers: {
-    type: [Schema.Types.ObjectId],
-    ref: 'User'
-  }
+  groupId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Group'
+  },
 }
 
 module.exports = model( 'Room', new Schema(RoomModel));

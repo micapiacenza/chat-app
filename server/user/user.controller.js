@@ -20,25 +20,6 @@ const assign_role_to_user = (id, role) => {
     return UserModel.findByIdAndUpdate(id, {role}, {new: true})
 };
 
-const upgradeUserToSuperAdmin = async (userId) => {
-  try {
-    // Check if the user exists and update their role to Super Admin
-    const user = await UserModel.findByIdAndUpdate(
-      userId,
-      { role: 'Super Admin' },
-      { new: true } // Return the updated user
-    );
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
-
 
 module.exports = {
     put_user,
@@ -46,5 +27,4 @@ module.exports = {
     list_users,
     assign_role_to_user,
     delete_user,
-    upgradeUserToSuperAdmin
 }

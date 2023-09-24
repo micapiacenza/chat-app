@@ -84,22 +84,5 @@ router.post('/:id/assign/:roleType', async (req, res, next) => {
     }
 });
 
-/**
- * Upgrade user to super admin
- */
-router.post('/upgrade/:userId', async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const upgradedUser = await controller.upgradeUserToSuperAdmin(userId);
-
-    if (!upgradedUser) {
-      res.status(404).json({ error: 'User not found' });
-    } else {
-      res.status(200).json({ message: 'User upgraded to Super Admin', user: upgradedUser });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'An error occurred' });
-  }
-});
 
 module.exports = router;

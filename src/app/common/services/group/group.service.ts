@@ -1,30 +1,28 @@
 import { Injectable } from '@angular/core';
-import {map, Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {HttpService} from "../http/http.service";
+import { HttpService } from '../http/http.service';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GroupService extends HttpService{
+export class GroupService {
 
-  constructor( httpClient:HttpClient) {
-    super(httpClient);
+  constructor(private httpService: HttpService) {
   }
 
   public listGroup(): Observable<any> {
-    return this.get('group/list').pipe(map((e:any)=> e.groups));
+    return this.httpService.get('group/list').pipe(map((e:any)=> e.groups));
   }
 
   public createGroup(body: any): Observable<any>  {
-    return this.put('group/create', body).pipe(map((e:any)=> e.groups));
+    return this.httpService.put('group/create', body).pipe(map((e:any)=> e.groups));
   }
 
   public getGroupById(id: string): Observable<any>  {
-    return this.get('group/' + id).pipe(map((e:any)=> e.groups));
+    return this.httpService.get('group/' + id).pipe(map((e:any)=> e.groups));
   }
 
   public deleteGroup(id: string): Observable<any>  {
-    return this.delete('group/' + id).pipe(map((e:any)=> e.groups));
+    return this.httpService.delete('group/' + id).pipe(map((e:any)=> e.groups));
   }
 }

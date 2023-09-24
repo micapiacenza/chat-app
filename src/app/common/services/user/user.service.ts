@@ -1,34 +1,27 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {map, Observable} from "rxjs";
-import {HttpService} from "../http/http.service";
+import { map } from 'rxjs/operators';
+import { HttpService } from '../http/http.service';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends HttpService{
+export class UserService {
+  constructor(private httpService: HttpService) {}
 
-  constructor( httpClient:HttpClient) {
-    super(httpClient);
+  public listUsers() {
+    return this.httpService.get('user/list').pipe(map((response: any) => response.users));
   }
 
-  public listUsers(): Observable<any> {
-    return this.get('user/list').pipe(map((e:any)=> e.users));
+  public getUserById(id: string) {
+    return this.httpService.get(`user/${id}`).pipe(map((response: any) => response.user));
   }
 
-  public createUser(body: any): Observable<any>  {
-    return this.put('user/create', body).pipe(map((e:any)=> e.users));
+  public assignRole(id: string, role: string) {
+    return this.httpService.post(`user/${id}/assign/${role}`, {}).pipe(map((response: any) => response.user));
   }
 
-  public getUserById(id: string): Observable<any>  {
-    return this.get('user/' + id).pipe(map((e:any)=> e.users));
-  }
-
-  public assignRole(id: string, role: string): Observable<any>  {
-    return this.post('user/' + id + '/assign/' + role, {}).pipe(map((e:any)=> e.users));
-  }
-
-  public deleteUser(id: string): Observable<any>  {
-    return this.delete('user/' + id).pipe(map((e:any)=> e.users));
+  public deleteUser(id: string): Observable<any> {
+    return this.httpService.delete(`user/${id}`).pipe(map((response: any) => response.user));
   }
 }

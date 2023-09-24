@@ -2,9 +2,6 @@
 <div class="my-3 mx-3" *ngIf="currentUser() | async as currentUser">
   <div class="row my-2">
     <h5 class="col">Users</h5>
-    <!--    Show for superAdmin & groupAdmin  -->
-    <button (click)="createUser(users)" *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" routerLink="/create-user" type="button" class="btn btn-outline-info col-2 mx-1">Create User</button>
-
 <!--    Show for superAdmin -->
     <div *ngIf="currentUser.role === roles.superAdmin">❗️ You can see all users from the app.</div>
 <!--    Show for groupAdmin -->
@@ -16,26 +13,28 @@
   <!--  Users List-->
   <div *ngFor="let user of users | async" class="accordion-body">
     <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
-      <div class="col text-capitalize">{{user | json}}</div>
-      <!--    Show for superAdmin only -->
-      <small *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" class="col-2 text-info"> Add to group </small>
+      <div class="col text-capitalize">{{user.username}} <small>{{user.role}}</small></div>
+      <!-- Show for superAdmin only -->
+      <button *ngIf="currentUser.role === roles.superAdmin || currentUser.role === roles.groupAdmin" class="col-2 p-1 m-1 btn btn-info" (click)="addToGroup(user._id)">Add to group</button>
 
-      <!--    Show for superAdmin & groupAdmin only -->
-      <small *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" class="col-2 text-info"> Add to room </small>
+      <!-- Show for superAdmin & groupAdmin only -->
+      <button *ngIf="currentUser.role === roles.superAdmin || currentUser.role === roles.groupAdmin" class="col-2 p-1  m-1 btn btn-info" (click)="addToRoom(user._id)">Add to room</button>
 
-      <!--    Show for superAdmin only -->
-      <small (click)="assignRoleToUser(user._id, roles.superAdmin)" *ngIf="currentUser.role === roles.superAdmin" class="col-2 text-info"> Make super admin </small>
+      <!-- Show for superAdmin only -->
+      <button *ngIf="currentUser.role === roles.superAdmin && user.role !== roles.superAdmin" class="col-2 p-1  m-1 btn btn-info" (click)="assignRoleToUser(user._id, roles.groupAdmin)">Make SuperAdmin</button>
 
-      <!--    Show for superAdmin only -->
-      <small (click)="assignRoleToUser(user._id, roles.groupAdmin)" *ngIf="currentUser.role === roles.superAdmin" class="col-2 text-info"> Make group admin </small>
+      <!-- Show for superAdmin only -->
+      <button *ngIf="currentUser.role === roles.superAdmin  && user.role !== roles.groupAdmin" class="col-2 p-1  m-1 btn btn-info" (click)="assignRoleToUser(user._id, roles.groupAdmin)">Make GroupAdmin</button>
 
-      <!--    Show for superAdmin & groupAdmin only -->
-      <small *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" class="col-2 text-info" (click)="assignRoleToUser(user._id, roles.groupAdmin)"> Make assistant </small>
+      <!-- Ban and Report if groupAdmin -->
+      <button *ngIf="currentUser.role === roles.groupAdmin" class="col-1 p-1  m-1 btn btn-info" (click)="banAndReportUser(user._id)">Ban & Report</button>
 
-      <!--    Show for superAdmin only -->
-<!--      TODO: Add to be able to see users only to groups/rooms are admin assist, -->
-<!--      TODO: to display remove option only for groups/rooms beloging to         -->
-      <div *ngIf="currentUser.role === roles.superAdmin || roles.groupAdmin" class="col-1 text-info" (click)="deleteUser(user._id)"> X </div>
+      <!-- Ban if superAdmin -->
+      <button *ngIf="currentUser.role === roles.superAdmin" class="col-1 p-1  m-1 btn btn-info" (click)="banUser(user._id)">Ban</button>
+
+      <!-- Show for superAdmin only -->
+      <!-- Show for groupAdmin only for users from groups they administer -->
+      <button *ngIf="currentUser.role === roles.superAdmin || currentUser.role === roles.groupAdmin" class="col-1 p-1  m-1 btn btn-info" (click)="deleteUser(user._id)">X</button>
     </div>
   </div>
 </div>
