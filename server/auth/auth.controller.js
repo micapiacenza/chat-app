@@ -54,7 +54,16 @@ const loginUser = async (email, pwd) => {
       { expiresIn: '1h' }
     );
 
-    return { token };
+    // Include user information in the response
+    const userResponse = {
+      token,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      id: user._id
+    };
+
+    return userResponse;
   } catch (error) {
     console.log('User Login error:', error);
     throw error;

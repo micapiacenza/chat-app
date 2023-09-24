@@ -7,6 +7,7 @@ export enum STORAGE_KEYS {
   currentUser = 'currentUser',
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -32,17 +33,11 @@ export class StorageService {
   }
 
   /**
-   * Assign user to a group and save it in local storage
+   * Delete item from local storage
+   * @param key
    */
-  public assignToGroup(group: any) {
-    this.setItem(STORAGE_KEYS.groups, group);
-  }
-
-  /**
-   * Assign user to a room and save it in local storage
-   */
-  public assignToRoom(room: any) {
-    this.setItem(STORAGE_KEYS.rooms, room);
+  public deleteItem(key: STORAGE_KEYS) {
+    window.localStorage.removeItem(key);
   }
 }
 

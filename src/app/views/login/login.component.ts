@@ -32,6 +32,9 @@ export class LoginComponent implements OnInit {
       this.auth.userLogin(userCredentials).subscribe(
         (response) => {
           console.log('User logged in successfully', response);
+
+          const currentUser = this.auth.getCurrentUser();
+          console.log('Current User from local storage:', currentUser);
         },
         (error) => {
           console.error('Error logging in', error);

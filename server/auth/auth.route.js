@@ -35,8 +35,8 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ error: result.error });
     }
 
-    // Return the token in the response
-    return res.status(200).json({ token: result.token });
+    // Return the extended user information in the response
+    return res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred' });
   }
