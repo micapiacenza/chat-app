@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../../../../../common/services/auth/auth.service";
+import { AuthService } from '../../../../../common/services/auth/auth.service';
+import { GroupService } from '../../../../../common/services/group/group.service';
+import { RoomService } from '../../../../../common/services/room/room.service';
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-expandable-group-card',
@@ -7,24 +10,44 @@ import {AuthService} from "../../../../../common/services/auth/auth.service";
   styleUrls: ['./expandable-group-card.component.css']
 })
 export class ExpandableGroupCardComponent implements OnInit {
-  public groupList = [
-    'Group 1',
-    'Group 2',
-    'Group 3',
-    'Group 4',
-    'Group 5',
-  ];
-  public roomList = [
-    'Room 1',
-    'Room 2',
-    'Room 3',
-  ];
-  public indexExpanded: number= -1;
-  public isExpand: boolean = false;
+  public indexExpanded: number = -1;
+  public isExpand: boolean[] = [];
+  public groups: Observable<any> | undefined;
+  public rooms: Observable<any> | undefined;
+  public groupedRooms: Record<string, any[]> = {};
 
-  constructor(private auth: AuthService) { }
+
+  constructor(
+    private auth: AuthService,
+    private groupService: GroupService,
+    private roomService: RoomService
+  ) { }
 
   ngOnInit(): void {
+    this.getAllGroups();
+    this.getAllRooms()
+  }
+
+  /**
+   * Get all Group
+   */
+  public getAllGroups() {
+    this.groups = this.groupService.listGroup();
+  }
+
+  /**
+   * Load the list of rooms for a group
+   */
+  public getAllRooms() {
+    this.roomService.listRooms().subscribe((rooms) => {
+      // Organize rooms by group ID
+      rooms.forEach((room: any) => {
+        if (!this.groupedRooms[room.groupId]) {
+          this.groupedRooms[room.groupId] = [];
+        }
+        this.groupedRooms[room.groupId].push(room);
+      });
+    });
   }
 
   /**
@@ -34,7 +57,7 @@ export class ExpandableGroupCardComponent implements OnInit {
     return this.auth.getCurrentUser();
   }
 
-  public expandCard() {
-    this.isExpand = ! this.isExpand;
+  public expandCard(index: number) {
+    this.isExpand[index] = !this.isExpand[index];
   }
 }
