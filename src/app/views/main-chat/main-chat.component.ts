@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import {SocketioService} from "../../common/services/socket/socketio.service";
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { SocketioService } from '../../common/services/socket/socketio.service';
 
 @Component({
   selector: 'app-main-chat',
   templateUrl: './main-chat.component.html',
-  styleUrls: ['./main-chat.component.css']
+  styleUrls: ['./main-chat.component.css'],
 })
 export class MainChatComponent implements OnInit {
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
   message: string = '';
   messages: string[] = [];
 
@@ -16,6 +17,7 @@ export class MainChatComponent implements OnInit {
     this.socketioService.getMessages().subscribe((message: string) => {
       console.log('Received message:', message);
       this.messages.push(message);
+      this.scrollToBottom();
     });
   }
 
@@ -26,6 +28,7 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-
-
+  private scrollToBottom(): void {
+    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+  }
 }
