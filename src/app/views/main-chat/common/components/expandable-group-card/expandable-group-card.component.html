@@ -9,7 +9,7 @@
     </div>
 
     <div *ngIf="isExpand" class="my-2 p-2 bg-white">
-      <div *ngFor="let roomList of user.rooms;" class="accordion-body border-bottom">
+      <div *ngFor="let roomList of user.groups;" class="accordion-body border-bottom">
         <div class="row">
           <div class="col">{{roomList | json}}</div>
         </div>

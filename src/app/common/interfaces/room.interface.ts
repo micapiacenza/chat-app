@@ -1,6 +1,7 @@
 import {UserInterface} from "./user.interface";
 
 export interface RoomInterface {
-  roomName?: string | undefined;
-  usersIds: Array<string>;
+  id: string | undefined;
+  roomName: string | undefined;
+  groupId: string | undefined;
 }

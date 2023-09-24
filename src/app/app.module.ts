@@ -9,7 +9,7 @@ import { CreateAccountComponent } from './views/create-account/create-account.co
 import { MainChatComponent } from './views/main-chat/main-chat.component';
 import { ProfileComponent } from './views/profile/profile.component';
 import { HomeComponent } from './views/home/home.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {AppBarComponent} from "./common/components/app-bar/app-bar.component";
 import {
@@ -41,6 +41,7 @@ import {UsersTabContentComponent} from "./views/profile/views/users-tab-content/
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

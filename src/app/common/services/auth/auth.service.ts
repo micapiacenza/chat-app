@@ -1,42 +1,24 @@
-import {Injectable} from '@angular/core';
-import {Router} from "@angular/router";
-import {UserInterface} from "../../interfaces/user.interface";
-import {Roles} from "../../interfaces/roles";
-import {STORAGE_KEYS, StorageService} from "../storage/storage.service";
-import {BehaviorSubject, Observable} from "rxjs";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { HttpService } from '../http/http.service';
+import { STORAGE_KEYS, StorageService } from '../storage/storage.service';
+import { UserInterface } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class AuthService {
-  // Users mock data
-  public users: Array<UserInterface> = [
-    // User 1
-    {email: 'joe@email.com', pwd: 'qwerty', username: 'Joe', groups: [
-      {groupName: 'Group A', rooms: [{usersIds: ['1', '2', '3']}]},
-      {groupName: 'Group B', rooms: [{usersIds: ['1', '2', '3']}]},
-      ], id: '1', role: Roles.superAdmin, rooms: []},
-    // User 2
-    {email: 'mica@email.com', pwd: 'qwerty', username: 'Mica', groups: [
-      {groupName: 'Group C', rooms: [{usersIds: ['1', '2', '3']}]},
-      {groupName: 'Group D', rooms: [{usersIds: ['1', '2', '3']}]},
-      {groupName: 'Group E', rooms: [{usersIds: ['1', '2', '3']}]},
-      ], id: '2', role: Roles.groupAdmin, rooms: []},
-    // User 3
-    {email: 'tom@email.com', pwd: 'qwerty', username: 'Tom', groups: [
-      {groupName: 'Group F', rooms: [{usersIds: ['1', '2', '3']}]},
-      {groupName: 'Group G', rooms: [{usersIds: ['1', '2', '3']}]},
-      ], id: '3', role: Roles.regularUser, rooms: []},
-  ];
-
-  public inputEmail: string = '';
-  public isUserLoggedIn: boolean = false;
-  // Subject that emits the last value emitted by the source Observable
+  public users: Array<UserInterface> = [];
   public currentUser: BehaviorSubject<UserInterface | null> = new BehaviorSubject<UserInterface | null>(null);
+  private loggedIn = new BehaviorSubject<boolean>(false);
 
-  constructor(private router: Router, private storageService: StorageService) {
-    // If there is no data, it will generate mock data
+  constructor(
+    private router: Router,
+    private httpService: HttpService,
+    private storageService: StorageService
+  ) {
     if (!this.storageService.getItem(STORAGE_KEYS.users)) {
       this.storageService.setItem(STORAGE_KEYS.users, this.users);
     }
@@ -50,49 +32,95 @@ export class AuthService {
   }
 
   /**
-   * Validates user session
-   */
-  public validateToken() {
-    if (this.storageService.getItem(STORAGE_KEYS.currentUser)){
-      this.userAuth();
-    }
-  }
-
-  /**
    * Sets logged in user as current user
    * @param val
    */
   public setCurrentUser(val: UserInterface): void {
-    this.currentUser.next(val)
+    this.currentUser.next(val);
   }
 
   /**
-   * User authentication
+   * User registration (signup)
+   * @param user UserInterface object with registration data
    */
-  public userAuth(): void {
-    let valid = false;
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].email === this.inputEmail) {
-        valid = true;
-        this.isUserLoggedIn = true;
-        this.setCurrentUser(this.users[i]);
-        this.router.navigate(['/main-chat']);
-        break;
-      }
-    }
-    if (!valid) {
-      this.isUserLoggedIn = false;
-      alert('Error: The user entered does not match any existing user');
-    }
+  public register(user: UserInterface): Observable<any> {
+    return this.httpService.post('auth/register', user).pipe(
+      map((response: any) => {
+        // Log the response for debugging
+        console.log('Server Response:', response);
+
+        // Check if the response indicates successful registration
+        if (response && response.message === 'User registered successfully') {
+          // Update the user login status and current user
+          this.setLoggedIn(true);
+          this.setCurrentUser(user);
+
+          // Navigate to the main chat or another appropriate route
+          this.router.navigate(['/main-chat']);
+
+          // Return any additional data you want to expose
+          return response;
+        } else {
+          // If the response doesn't match the success message, handle the error
+          this.setLoggedIn(false);
+          throw new Error('Registration failed');
+        }
+      }),
+      catchError((error) => {
+        // Handle network errors or server errors
+        this.setLoggedIn(false);
+        return throwError(error);
+      })
+    );
   }
+
+
+  /**
+   * User login
+   */
+  public userLogin(userCredentials: { email: string, pwd: string }): Observable<any> {
+    return this.httpService.post('auth/login', userCredentials).pipe(
+      map((response: any) => {
+        // Check if the response contains the token property
+        if (response && response.token) {
+          // Save the token to local storage
+          localStorage.setItem('token', response.token);
+
+          // Update user login status
+          this.setLoggedIn(true);
+
+          // Navigate to the main chat or another appropriate route
+          this.router.navigate(['/main-chat']);
+          return response; // Return the entire response if needed
+        } else {
+          this.setLoggedIn(false);
+          throw new Error('Authentication failed');
+        }
+      }),
+      catchError((error) => {
+        this.setLoggedIn(false);
+        return throwError(error);
+      })
+    );
+  }
+
 
   /**
    * User log out
    */
-  public logOut(): void {
-    this.storageService.setItem(STORAGE_KEYS.currentUser, undefined);
-    void this.router.navigate(['/']);
-    this.currentUser.next(null);
+  logout(): void {
+    localStorage.removeItem('currentUser');
+    this.setLoggedIn(false);
+    this.router.navigate(['/']);
   }
 
+  // Function to return the login status as a boolean
+  get isLoggedIn$(): Observable<boolean> {
+    return this.loggedIn.asObservable();
+  }
+
+  // Function to set the logged-in status
+  setLoggedIn(value: boolean): void {
+    this.loggedIn.next(value);
+  }
 }

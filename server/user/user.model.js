@@ -12,6 +12,7 @@ const UserModel = {
         type: String,
     },
     email: {
+        unique: true,
         required: true,
         type: String,
     },

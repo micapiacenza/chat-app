@@ -1,46 +1,62 @@
-const UserModel = require('../user/user.model'); // Adjust the path based on your project structure
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const UserModel = require('../user/user.model');
 
-const registerUser = async (email, username, password) => {
+const registerUser = async (email, username, password, role) => {
   try {
-    // Check if a user with the provided email already exists
-    const existingUser = await UserModel.findOne({ email });
+    // Check if a user with the provided email or username already exists
+    const existingUser = await UserModel.findOne({ $or: [{ email }, { username }] });
 
     if (existingUser) {
-      return { error: 'User with this email already exists' };
+      return { error: 'User with this email or username already exists' };
     }
+
+    // Hash the password before storing it
+    const hashedPassword = await bcrypt.hash(password, 10);
+
 
     // Create a new user
     const newUser = new UserModel({
       email,
       username,
-      pwd: password, // You might want to hash the password before storing it
+      pwd: hashedPassword,
+      role,
     });
 
     await newUser.save();
 
     return { message: 'User registered successfully' };
   } catch (error) {
+    console.log('User Registration error:', error);
     throw error;
   }
 };
 
-const loginUser = async (email, password) => {
+const loginUser = async (email, pwd) => {
   try {
-    // Check if a user with the provided email exists
     const user = await UserModel.findOne({ email });
 
     if (!user) {
       return { error: 'User not found' };
     }
 
-    // Compare the provided password with the stored password (you should use bcrypt for this)
-    if (user.pwd !== password) {
+    // Compare the hashed password
+    const passwordMatch = await bcrypt.compare(pwd, user.pwd);
+
+    if (!passwordMatch) {
       return { error: 'Incorrect password' };
     }
 
-    // Return the user object or a token, depending on your authentication method
-    return { user }; // You might want to generate and return a token here
+    // Generate a JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      'chat-app',
+      { expiresIn: '1h' }
+    );
+
+    return { token };
   } catch (error) {
+    console.log('User Login error:', error);
     throw error;
   }
 };
