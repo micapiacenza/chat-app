@@ -1,17 +1,19 @@
 module.exports = {
   connect: function (io) {
-    const chat = io.of('/');
-
-    chat.on('connection', (socket) => {
+    io.on('connection', (socket) => {
       console.log('User connected');
 
       socket.on('message', (message) => {
         console.log('Received message:', message);
-        chat.emit('message', message);
+        io.emit('message', message);
       });
 
       socket.on('disconnect', () => {
         console.log('User disconnected');
+      });
+
+      socket.on('error', (error) => {
+        console.error('Socket error:', error);
       });
     });
   }

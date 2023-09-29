@@ -17,7 +17,6 @@ export class MainChatComponent implements OnInit {
     this.socketioService.getMessages().subscribe((message: string) => {
       console.log('Received message:', message);
       this.messages.push(message);
-      this.scrollToBottom();
     });
   }
 
@@ -28,7 +27,7 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  private scrollToBottom(): void {
-    this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-  }
+  // private scrollToBottom(): void {
+  //   this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+  // }
 }

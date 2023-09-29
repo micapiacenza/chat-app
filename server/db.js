@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://micapiacenza:qwerty123@cluster0.wwjtkt2.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://micaelapiacenza:qwerty123@cluster0.ejgjspn.mongodb.net/?retryWrites=true&w=majority";
 
 // Export an async function that connects to MongoDB and returns the connection
 async function connectToMongoDB() {

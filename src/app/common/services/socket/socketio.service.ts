@@ -15,7 +15,8 @@ export class SocketioService {
   }
 
   private initSocket(): void {
-    this.socket = io(SERVER_URL, { transports: ['websocket'] });
+    this.socket = io(SERVER_URL);
+    console.log('initSocket', this.socket);
   }
 
   sendMessage(message: string): void {
@@ -24,6 +25,7 @@ export class SocketioService {
   }
 
   getMessages(): Observable<string> {
+    console.log('getMessages');
     return new Observable<string>((observer) => {
       this.socket?.on('message', (message: string) => {
         console.log('Received message:', message);
