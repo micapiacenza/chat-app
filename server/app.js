@@ -30,7 +30,7 @@ sockets.connect(io);
 // Connect to MongoDB before starting the Express server
 connectToMongoDB()
   .then((mongoClient) => {
-    app.listen(PORT, () => {
+    http.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
   })
