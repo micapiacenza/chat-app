@@ -43,7 +43,8 @@ export class GroupRoomTabContentComponent implements OnInit {
   public deleteGroup(id: string) {
     this.groupService.deleteGroup(id).subscribe(
       () => {
-        this.getAllGroups();
+        console.log('Group deleted successfully');
+        window.location.reload();
       },
       (error) => {
         console.error('Error deleting group', error);
@@ -73,7 +74,7 @@ export class GroupRoomTabContentComponent implements OnInit {
     this.roomService.deleteRoom(id).subscribe(
       () => {
         console.log('Room deleted successfully');
-        this.getAllRooms();
+        window.location.reload();
       },
       (error) => {
         console.error('Error deleting room', error);
