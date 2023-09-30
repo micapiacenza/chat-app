@@ -1,26 +1,7 @@
-/* Chat Messages Container */
-.chat-messages {
-  height: 100%;
-  overflow-y: auto;
-}
-
-/* Vertical Line Style */
-.vertical-line {
-  border-left: 1px solid #9a9999;
-  height: 100%;
-  position:absolute;
-  left: 35%;
-}
-
-/* Input and Send Button Container */
-.input-container {
-  display: flex;
-  margin-left: 3%;
-  background-color: #fff;
-}
-
-/* Input Field */
-.form-control {
-  flex: 1;
-  margin-right: 10px;
+.chat-header {
+  background-color: #e0f6fd;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  text-transform: uppercase;
 }

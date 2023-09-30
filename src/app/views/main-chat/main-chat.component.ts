@@ -11,6 +11,10 @@ export class MainChatComponent implements OnInit {
   message: string = '';
   messages: string[] = [];
 
+  // Properties to store selected group and room names
+  selectedGroup: string = '';
+  selectedRoom: string = '';
+
   constructor(private socketioService: SocketioService) {}
 
   ngOnInit(): void {
@@ -26,8 +30,4 @@ export class MainChatComponent implements OnInit {
       this.message = '';
     }
   }
-
-  // private scrollToBottom(): void {
-  //   this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-  // }
 }

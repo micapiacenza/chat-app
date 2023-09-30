@@ -1,23 +1,51 @@
-<div class="row mx-3">
-  <!-- List of chats -->
-  <div class="col-4 bg-light">
-    <app-expandable-group-card></app-expandable-group-card>
-  </div>
+<section>
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-md-4">
+        <app-expandable-group-card
+          (groupSelected)="selectedGroup = $event"
+          (roomSelected)="selectedRoom = $event"
+        ></app-expandable-group-card>
+      </div>
+      <div class="col-md-8">
+        <div class="card" id="chat3" style="border-radius: 15px; height: 600px;">
+          <div class="card-body">
+            <!-- Header -->
+            <div class="chat-header">
+              {{ selectedGroup }} - {{ selectedRoom }}
+            </div>
 
-  <div class="vertical-line"></div>
+            <!-- Chat Messages -->
+            <div style="overflow-y: auto; height: 420px;">
+              <div
+                *ngFor="let message of messages"
+                class="d-flex justify-content-start align-items-center p-2"
+              >
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                  alt="avatar"
+                  style="width: 30px; height: 30px; border-radius: 50%;"
+                />
+                <div class="bg-light rounded p-2 ms-2">
+                  {{ message }}
+                </div>
+              </div>
+            </div>
 
-  <!-- Chat view -->
-  <div class="col-8 bg-light text-black">
-    <div class="chat-messages">
-      <div *ngFor="let message of messages" class="message">
-        {{ message }}
+            <!-- Message Input -->
+            <div class="text-muted d-flex justify-content-start align-items-center pt-3">
+              <input
+                [(ngModel)]="message"
+                class="form-control form-control-lg me-2"
+                placeholder="Type a message..."
+              />
+              <button (click)="sendMessage()" class="btn btn-info text-light">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Input and Send Button at the Bottom -->
-    <div class="input-container">
-      <input [(ngModel)]="message" class="form-control" placeholder="Type a message..." />
-      <button (click)="sendMessage()" class="btn btn-info text-light">Send</button>
-    </div>
   </div>
-</div>
+</section>
