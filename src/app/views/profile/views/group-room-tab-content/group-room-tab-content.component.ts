@@ -72,9 +72,8 @@ export class GroupRoomTabContentComponent implements OnInit {
   public deleteRoom(id: string) {
     this.roomService.deleteRoom(id).subscribe(
       () => {
-        // Room deleted successfully, you can handle any additional logic here
         console.log('Room deleted successfully');
-        this.getAllRooms(); // Refresh the rooms after deletion
+        this.getAllRooms();
       },
       (error) => {
         console.error('Error deleting room', error);
