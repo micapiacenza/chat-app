@@ -2,13 +2,12 @@ const RoomModel = require('./room.model');
 const UserModel = require('../user/user.model');
 const GroupModel = require('../group/group.model');
 
-const put_room = async (name, groupId) => {
+const put_room = async (name, groupId, users = []) => {
   try {
-    const createdRoom = await RoomModel.create({ name, groupId });
+    const createdRoom = await RoomModel.create({ name, groupId, users });
 
-    // Update the corresponding group document
     await GroupModel.findByIdAndUpdate(groupId, {
-      $push: { rooms: createdRoom._id }
+      $push: { rooms: createdRoom._id },
     });
 
     return createdRoom;
@@ -16,7 +15,6 @@ const put_room = async (name, groupId) => {
     throw error;
   }
 };
-
 
 const list_rooms = () => {
   return RoomModel.find();
@@ -30,61 +28,21 @@ const delete_room = (id) => {
   return RoomModel.findByIdAndRemove(id);
 };
 
-const get_users_room = async (roomId) => {
+const add_message_to_room = async (roomId, senderId, content) => {
   try {
-    const room = await RoomModel.findById(roomId);
+    const message = {
+      sender: senderId,
+      content,
+    };
 
-    if (!room) {
-      throw new Error('Room not found');
-    }
+    // Add the message to the room's messages array
+    const updatedRoom = await RoomModel.findByIdAndUpdate(
+      roomId,
+      { $push: { messages: message } },
+      { new: true }
+    );
 
-    const users = await UserModel.find({ _id: { $in: room.users } });
-
-    return users;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const add_users_to_room = async (roomId, userIds) => {
-  try {
-    const room = await RoomModel.findById(roomId);
-
-    if (!room) {
-      throw new Error('Room not found');
-    }
-
-    // Check if the users exist
-    const users = await UserModel.find({ _id: { $in: userIds } });
-
-    if (users.length !== userIds.length) {
-      throw new Error('One or more users not found');
-    }
-
-    // Add the users to the room
-    room.users.push(...userIds);
-    await room.save();
-
-    return room;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const remove_user_from_room = async (roomId, userId) => {
-  try {
-    const room = await RoomModel.findById(roomId);
-
-    if (!room) {
-      throw new Error('Room not found');
-    }
-
-    // Remove the user from the room's users array
-    room.users = room.users.filter((id) => id.toString() !== userId);
-
-    await room.save();
-
-    return room;
+    return updatedRoom.messages;
   } catch (error) {
     throw error;
   }
@@ -95,7 +53,5 @@ module.exports = {
   list_rooms,
   get_room,
   delete_room,
-  get_users_room,
-  add_users_to_room,
-  remove_user_from_room,
+  add_message_to_room
 };

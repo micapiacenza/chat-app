@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import {HttpService} from "../http/http.service";
+import {map} from "rxjs/operators";
 
 const SERVER_URL = 'http://localhost:3001';
 
@@ -10,7 +12,7 @@ const SERVER_URL = 'http://localhost:3001';
 export class SocketioService {
   private socket: Socket | undefined;
 
-  constructor() {
+  constructor(private http: HttpService) {
     this.initSocket();
   }
 
@@ -32,6 +34,11 @@ export class SocketioService {
         observer.next(message);
       });
     });
+  }
+
+  public joinGroup(groupId: string, userId: string): Observable<any> {
+    const body = { userId:  userId }; // You need to provide the user's ID
+    return this.http.post(`group/${groupId}/join`, body).pipe(map((e: any) => e.group));
   }
 
 }

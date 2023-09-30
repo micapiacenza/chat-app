@@ -7,16 +7,16 @@ const router = express.Router();
  * Create group
  */
 router.put('/create', async (req, res, next) => {
-    try {
-        console.log(req.body);
-        const { name } = req.body;
-        await controller.put_group(name);
-        res.status(200);
-        return res.json({ok: 'ok'});
-    } catch (e) {
-        res.status(400);
-        return res.json({e});
-    }
+  try {
+    console.log(req.body);
+    const { name, memberUserIds } = req.body;
+    await controller.put_group(name, memberUserIds);
+    res.status(200);
+    return res.json({ ok: 'ok' });
+  } catch (e) {
+    res.status(400);
+    return res.json({ e });
+  }
 });
 
 /**
@@ -140,6 +140,37 @@ router.post('/promote/:userId', async (req, res, next) => {
     }
   } catch (error) {
     res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+/**
+ * Join a group
+ */
+router.post('/:id/join', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    // Call the controller method to join the group
+    const joinedGroup = await controller.join_group(id, userId);
+
+    res.status(200).json({ message: 'Joined group successfully', group: joinedGroup });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
+/**
+ * Leave a group
+ */
+router.post('/leave/:groupId', async (req, res, next) => {
+  try {
+    const { groupId } = req.params;
+    const { userId } = req.body;
+    await controller.leave_group(groupId, userId);
+    res.status(200).json({ message: 'User left the group' });
+  } catch (e) {
+    res.status(400).json({ error: 'An error occurred' });
   }
 });
 

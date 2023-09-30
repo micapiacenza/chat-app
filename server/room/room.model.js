@@ -13,6 +13,13 @@ const RoomModel = {
     type: Schema.Types.ObjectId,
     ref: 'Group'
   },
+  messages: [
+    {
+      sender: { type: Schema.Types.ObjectId, ref: 'User' },
+      content: String,
+      timestamp: { type: Date, default: Date.now },
+    },
+  ],
 }
 
 module.exports = model( 'Room', new Schema(RoomModel));

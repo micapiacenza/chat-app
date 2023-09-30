@@ -1,17 +1,22 @@
-<!-- Modify the expandCard method to emit events -->
 <div *ngFor="let group of groups | async; let i = index" class="accordion my-2">
   <div class="row bg-light text-dark my-2 p-2 border border-1 rounded">
     <div (click)="expandCard(i); selectGroup(group.name)" class="col w-100 text-black" type="button">
       {{ group.name }}
     </div>
-    <button class="col-3 p-1 m-1 btn btn-info text-light"> Join Group </button>
+    <button (click)="joinGroup(group._id)" class="col-3 p-1 m-1 btn btn-info text-light">Join Group</button>
   </div>
 
   <div *ngIf="isExpand[i]" class="my-2 p-2">
-    <div *ngFor="let room of groupedRooms[group._id]" class="accordion-body border-bottom">
-      <div class="row">
-        <div (click)="selectRoom(room.name)" class="col">{{ room.name }}</div>
+    <!-- Check if the user is a member of the group to render chat -->
+    <div *ngIf="isMember(group._id)">
+      <div *ngFor="let room of groupedRooms[group._id]" class="accordion-body border-bottom">
+        <div class="row">
+          <div (click)="selectRoom(room.name)" class="col">{{ room.name }}</div>
+        </div>
       </div>
+    </div>
+    <div *ngIf="!isMember(group._id)" class="text-muted">
+      Join the group to start chatting.
     </div>
   </div>
 </div>

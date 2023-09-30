@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import { AuthService } from '../../../../../common/services/auth/auth.service';
-import { GroupService } from '../../../../../common/services/group/group.service';
-import { RoomService } from '../../../../../common/services/room/room.service';
+import {AuthService} from '../../../../../common/services/auth/auth.service';
+import {GroupService} from '../../../../../common/services/group/group.service';
+import {RoomService} from '../../../../../common/services/room/room.service';
 import {Observable} from "rxjs";
 
 @Component({
@@ -10,7 +10,6 @@ import {Observable} from "rxjs";
   styleUrls: ['./expandable-group-card.component.css']
 })
 export class ExpandableGroupCardComponent implements OnInit {
-  // Event emitters for selected group and room
   @Output() groupSelected = new EventEmitter<string>();
   @Output() roomSelected = new EventEmitter<string>();
 
@@ -40,6 +39,41 @@ export class ExpandableGroupCardComponent implements OnInit {
   selectRoom(roomName: string) {
     this.roomSelected.emit(roomName);
   }
+
+  joinGroup(groupId: string) {
+    this.auth.getCurrentUser().subscribe((user) => {
+    console.log(user);
+
+      if (user) {
+        this.groupService.joinGroup(groupId, user?.id).subscribe(
+          (group: any) => {
+            // Handle successful group join here
+            console.log(`Joined group: ${group.name}`);
+            // You may want to refresh the list of rooms or perform other actions here
+          },
+          (error) => {
+            // Handle error if joining the group fails
+            console.error('Error joining group:', error);
+          }
+        );
+      }
+    });
+  }
+
+  public isMember(groupId: string): boolean {
+    this.auth.getCurrentUser().subscribe((user) => {
+      if (!user) {
+        return false;
+      }
+      const group: any = this.groupService.getGroupById(groupId);
+      if (group) {
+        return group.members.includes(user.id);
+      }
+    });
+
+    return false;
+  }
+
 
   /**
    * Get all Group

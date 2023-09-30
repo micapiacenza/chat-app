@@ -24,17 +24,4 @@ export class RoomService {
   public deleteRoom(id: string): Observable<any> {
     return this.httpService.delete('room/' + id).pipe(map((response: any) => response.room));
   }
-
-  public getRoomUsers(id: string): Observable<any> {
-    return this.httpService.get('room/' + id + '/users').pipe(map((response: any) => response.users));
-  }
-
-  public addUsersToRoom(roomId: string, userIds: string[]): Observable<any> {
-    const body = { userIds };
-    return this.httpService.put('room/' + roomId + '/add-user', body).pipe(map((response: any) => response.room));
-  }
-
-  public sendJoinRequest(roomId: string): Observable<any> {
-    return this.httpService.post('room/' + roomId + '/join', {}).pipe(map((response: any) => response.joinRequest));
-  }
 }
