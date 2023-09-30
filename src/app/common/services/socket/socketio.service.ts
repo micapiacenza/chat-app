@@ -22,12 +22,11 @@ export class SocketioService {
   }
 
   sendMessage(message: string): void {
-    console.log('Sending message:', message);
+    console.log('Sending message!!!!', message);
     this.socket?.emit('message', message);
   }
 
   getMessages(): Observable<string> {
-    console.log('getMessages');
     return new Observable<string>((observer) => {
       this.socket?.on('message', (message: string) => {
         console.log('Received message:', message);

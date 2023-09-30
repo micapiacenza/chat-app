@@ -7,16 +7,15 @@
   </div>
 
   <div *ngIf="isExpand[i]" class="my-2 p-2">
-    <!-- Check if the user is a member of the group to render chat -->
-    <div *ngIf="isMember(group._id)">
+    <div>
       <div *ngFor="let room of groupedRooms[group._id]" class="accordion-body border-bottom">
         <div class="row">
           <div (click)="selectRoom(room.name)" class="col">{{ room.name }}</div>
         </div>
       </div>
     </div>
-    <div *ngIf="!isMember(group._id)" class="text-muted">
-      Join the group to start chatting.
-    </div>
+<!--    <div *ngIf="!isMember(group._id)" class="text-muted">-->
+<!--      Join the group to start chatting.-->
+<!--    </div>-->
   </div>
 </div>

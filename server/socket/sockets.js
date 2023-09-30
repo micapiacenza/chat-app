@@ -4,7 +4,7 @@ module.exports = {
       console.log('User connected');
 
       socket.on('join-room', (roomId) => {
-        socket.join(roomId); // Join the room
+        socket.join(roomId);
         console.log(`User joined room: ${roomId}`);
       });
 
@@ -13,9 +13,14 @@ module.exports = {
         console.log(`User left room: ${roomId}`);
       });
 
-      socket.on('send-message', (roomId, message) => {
-        io.to(roomId).emit('receive-message', message);
-        console.log(`Message sent to room ${roomId}:`, message);
+      // TODO: IMPLEMENT THE CODE BELOW PROPERLY SO THAT THE CHAT HAPPENS IN THE ROOM
+      // socket.on('send-message', (roomId, message) => {
+      //   io.to(roomId).emit('receive-message', message);
+      //   console.log(`Message sent to room ${roomId}:`, message);
+
+      socket.on('message', (message) => {
+        console.log('Received message:', message);
+        io.emit('message', message);
       });
 
       socket.on('disconnect', () => {

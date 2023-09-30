@@ -60,19 +60,19 @@ export class ExpandableGroupCardComponent implements OnInit {
     });
   }
 
-  public isMember(groupId: string): boolean {
-    this.auth.getCurrentUser().subscribe((user) => {
-      if (!user) {
-        return false;
-      }
-      const group: any = this.groupService.getGroupById(groupId);
-      if (group) {
-        return group.members.includes(user.id);
-      }
-    });
-
-    return false;
-  }
+  // public isMember(groupId: string): boolean {
+  //   this.auth.getCurrentUser().subscribe((user) => {
+  //     if (!user) {
+  //       return false;
+  //     }
+  //     const group: any = this.groupService.getGroupById(groupId);
+  //     if (group) {
+  //       return group.members.includes(user.id);
+  //     }
+  //   });
+  //
+  //   return false;
+  // }
 
 
   /**
