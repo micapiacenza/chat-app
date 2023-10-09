@@ -22,6 +22,7 @@ export class MainChatComponent implements OnInit {
       console.log('Received message:', message);
       this.messages.push(message);
     });
+
   }
 
   sendMessage(): void {
@@ -29,5 +30,12 @@ export class MainChatComponent implements OnInit {
       this.socketioService.sendMessage(this.message);
       this.message = '';
     }
+  }
+
+  // Create a new chat instance when a group or room is selected
+  createChat(selectedGroup: string, selectedRoom: string): void {
+    this.selectedGroup = selectedGroup;
+    this.selectedRoom = selectedRoom;
+    this.messages = []; // Clear the chat messages
   }
 }

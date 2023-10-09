@@ -7,7 +7,12 @@
           (roomSelected)="selectedRoom = $event"
         ></app-expandable-group-card>
       </div>
-      <div class="col-md-8">
+      <!-- Check if no group or room is selected -->
+      <ng-template *ngIf="!selectedGroup && !selectedRoom" class="text-center">
+        <p class="text-muted">Join a Group to Chat</p>
+      </ng-template>
+
+      <div *ngIf="selectedGroup" class="col-md-8">
         <div class="card" id="chat3" style="border-radius: 15px; height: 600px;">
           <div class="card-body">
             <!-- Header -->

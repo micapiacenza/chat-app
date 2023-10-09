@@ -20,6 +20,11 @@ const list_rooms = () => {
   return RoomModel.find();
 };
 
+const list_rooms_array = async () => {
+  const rooms = await RoomModel.find().lean().exec();
+  return rooms;
+}
+
 const get_room = (id) => {
   return RoomModel.findById(id);
 };
@@ -53,5 +58,6 @@ module.exports = {
   list_rooms,
   get_room,
   delete_room,
-  add_message_to_room
+  add_message_to_room,
+  list_rooms_array
 };

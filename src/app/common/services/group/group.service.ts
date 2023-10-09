@@ -19,11 +19,11 @@ export class GroupService {
   }
 
   public getGroupById(id: string): Observable<any>  {
-    return this.httpService.get('group/' + id).pipe(map((e:any)=> e.groups));
+    return this.httpService.get('group/' + id).pipe(map((e:any)=> e.group));
   }
 
   public deleteGroup(id: string): Observable<any>  {
-    return this.httpService.delete('group/' + id).pipe(map((e:any)=> e.groups));
+    return this.httpService.delete('group/' + id).pipe(map((e:any)=> e.group));
   }
 
   public joinGroup(groupId: string, userId: string | undefined): Observable<any> {
@@ -31,8 +31,12 @@ export class GroupService {
     return this.httpService.post(`group/${groupId}/join`, body).pipe(map((e: any) => e.group));
   }
 
-  public leaveGroup(groupId: string, userId: string): Observable<any> {
+  public leaveGroup(groupId: string, userId: string | undefined): Observable<any> {
     const body = { userId };
     return this.httpService.post(`group/${groupId}/leave`, body).pipe(map((e: any) => e.group));
+  }
+
+  public getGroupMembers(groupId: string): Observable<any> {
+    return this.httpService.get(`group/${groupId}/members`);
   }
 }

@@ -3,6 +3,7 @@ import {AuthService} from '../../../../../common/services/auth/auth.service';
 import {GroupService} from '../../../../../common/services/group/group.service';
 import {RoomService} from '../../../../../common/services/room/room.service';
 import {Observable} from "rxjs";
+import {SocketioService} from "../../../../../common/services/socket/socketio.service";
 
 @Component({
   selector: 'app-expandable-group-card',
@@ -16,6 +17,7 @@ export class ExpandableGroupCardComponent implements OnInit {
 
   public indexExpanded: number = -1;
   public isExpand: boolean[] = [];
+  public groupMembership: Record<string, boolean> = {};
   public groups: Observable<any> | undefined;
   public rooms: Observable<any> | undefined;
   public groupedRooms: Record<string, any[]> = {};
@@ -24,12 +26,14 @@ export class ExpandableGroupCardComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private groupService: GroupService,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private socketioService: SocketioService,
   ) { }
 
   ngOnInit(): void {
     this.getAllGroups();
-    this.getAllRooms()
+    this.getAllRooms();
+    this.isUserInGroup();
   }
 
   selectGroup(groupName: string) {
@@ -40,19 +44,28 @@ export class ExpandableGroupCardComponent implements OnInit {
     this.roomSelected.emit(roomName);
   }
 
-  joinGroup(groupId: string) {
+  async isUserInGroup() {
+    this.auth.getCurrentUser().subscribe((user) => {
+      if (user) {
+        this.groupService.listGroup().subscribe((groups) => {
+          groups.forEach((group: any) => {
+            this.groupMembership[group._id] = group.members.includes(user.id);
+          });
+        });
+      }
+    });
+  }
+
+  async joinGroup(groupId: string) {
+    console.log(`Joining group: ${groupId}`);
     this.auth.getCurrentUser().subscribe((user) => {
     console.log(user);
-
       if (user) {
         this.groupService.joinGroup(groupId, user?.id).subscribe(
           (group: any) => {
-            // Handle successful group join here
             console.log(`Joined group: ${group.name}`);
-            // You may want to refresh the list of rooms or perform other actions here
           },
           (error) => {
-            // Handle error if joining the group fails
             console.error('Error joining group:', error);
           }
         );
@@ -60,20 +73,28 @@ export class ExpandableGroupCardComponent implements OnInit {
     });
   }
 
-  // public isMember(groupId: string): boolean {
-  //   this.auth.getCurrentUser().subscribe((user) => {
-  //     if (!user) {
-  //       return false;
-  //     }
-  //     const group: any = this.groupService.getGroupById(groupId);
-  //     if (group) {
-  //       return group.members.includes(user.id);
-  //     }
-  //   });
-  //
-  //   return false;
-  // }
+  async leaveGroup(groupId: string) {
+    console.log(`Leaving group: ${groupId}`);
+    this.auth.getCurrentUser().subscribe((user) => {
+      console.log(user);
+      if (user) {
+        this.groupService.leaveGroup(groupId, user?.id).subscribe(
+          (group: any) => {
+            console.log(`Left group: ${group.name}`);
+            this.socketioService.leaveRoom(group.name); // TODO: Adjust to leave all rooms within group
+          },
+          (error) => {
+            console.error('Error leaving group:', error);
+          }
+        );
+      }
+    });
+  }
 
+  joinRoom(roomId: string) {
+    this.socketioService.joinRoom(roomId);
+    console.log(`Joining room: ${roomId}`);
+  }
 
   /**
    * Get all Group

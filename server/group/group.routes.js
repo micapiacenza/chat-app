@@ -174,5 +174,18 @@ router.post('/leave/:groupId', async (req, res, next) => {
   }
 });
 
+/**
+ * Get all members of a group
+ */
+router.get('/:groupId/members', async (req, res, next) => {
+  try {
+    const { groupId } = req.params;
+    const members = await controller.get_group_members(groupId);
+    res.status(200).json({ members });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 router.use(':groupId/room', roomRouter);
 module.exports = router;

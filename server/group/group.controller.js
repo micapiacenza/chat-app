@@ -99,6 +99,19 @@ const leave_group = async (groupId, userId) => {
   }
 };
 
+const get_group_members = async (groupId) => {
+  try {
+    const group = await GroupModel.findById(groupId).populate('members');
+    if (!group) {
+      throw new Error('Group not found');
+    }
+    return group.members;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = {
     put_group,
@@ -109,5 +122,6 @@ module.exports = {
     get_users_in_room,
     promote_user_to_GroupAdmin,
     leave_group,
-    join_group
+    join_group,
+    get_group_members
 }
