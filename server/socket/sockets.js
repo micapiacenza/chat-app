@@ -23,12 +23,19 @@ module.exports = {
     chat.on('connection', (socket) => {
       console.log('User connected');
 
-      socket.on('message', (message) => {
-        console.log('Received message be:', message);
+      socket.on('message', (message, room) => {
+        console.log('Received message 1:', message);
+        console.log('Received room 1:', room);
 
+        // Iterate through socketRoom array to find the room associated with the user
         for (let i = 0; i < socketRoom.length; i++) {
           if (socketRoom[i][0] === socket.id) {
-            chat.to(socketRoom[i][1]).emit('message', message);
+            // Check if the message is for the user's current room
+            if (socketRoom[i][1] === room) {
+              console.log('Received message 2:', message);
+              console.log('Received room 2:', room);
+              io.to(room).emit('message', { message: message, room: room });
+            }
           }
         }
       });
@@ -49,27 +56,20 @@ module.exports = {
       socket.on('joinRoom', (roomId) => {
         if (roomNames) {
           for (let i = 0; i < roomNames.length; i++) {
-            console.log('comparison', roomNames[i] === roomId);
-            console.log('ROOMS name', roomNames[i]);
-            console.log('roomId ', roomId);
 
             if (roomNames[i] === roomId) {
-              console.log('ROOMS id inside condition', roomNames[i]);
 
               // what it was inside join callback
               let alreadyInRoom = false;
 
               for (let i = 0; i < socketRoom.length; i++) {
-                console.log('SOCKET ROOM in!!!', socketRoom);
                 if (socketRoom[i][0] === socket.id) {
                   socketRoom[i][1] = roomId;
                   alreadyInRoom = true;
                 }
               }
 
-              console.log('alreadyInRoom', alreadyInRoom);
               if (!alreadyInRoom) {
-                console.log('SOCKET ROOM out!!!', socketRoom);
                 socketRoom.push([socket.id, roomId]);
                 let hasRoomNum = false;
 

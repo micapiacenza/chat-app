@@ -1,5 +1,6 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChild, SimpleChanges} from '@angular/core';
 import { SocketioService } from '../../common/services/socket/socketio.service';
+import {MessageInterface} from "../../common/interfaces/message.interface";
 
 @Component({
   selector: 'app-main-chat',
@@ -9,7 +10,7 @@ import { SocketioService } from '../../common/services/socket/socketio.service';
 export class MainChatComponent implements OnInit {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
   message: string = '';
-  messages: string[] = [];
+  messages: any[] = [];
 
   // Properties to store selected group and room names
   selectedGroup: string = '';
@@ -17,25 +18,23 @@ export class MainChatComponent implements OnInit {
 
   constructor(private socketioService: SocketioService) {}
 
-  ngOnInit(): void {
-    this.socketioService.getMessages().subscribe((message: string) => {
-      console.log('Received message:', message);
-      this.messages.push(message);
+  ngOnInit() {
+    this.socketioService.getMessages().subscribe((messageData: { message: string; room: string }) => {
+      console.log('Received message component:', messageData);
+      this.messages.push(messageData);
     });
-
   }
 
   sendMessage(): void {
-    if (this.message.trim() !== '') {
-      this.socketioService.sendMessage(this.message);
+    if (this.message.trim() !== '' && this.selectedRoom) {
+      this.socketioService.sendMessage(this.message, this.selectedRoom);
       this.message = '';
     }
   }
 
-  // Create a new chat instance when a group or room is selected
-  createChat(selectedGroup: string, selectedRoom: string): void {
-    this.selectedGroup = selectedGroup;
-    this.selectedRoom = selectedRoom;
-    this.messages = []; // Clear the chat messages
+  filterChatMessages(): string[] {
+    return this.messages.filter((message) => {
+      return message.room === this.selectedRoom;
+    });
   }
 }

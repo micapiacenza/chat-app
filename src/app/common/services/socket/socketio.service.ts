@@ -28,17 +28,14 @@ export class SocketioService {
     this.socket?.emit('message', message, room);
   }
 
-  getMessages(selectedRoom: string): Observable<any> {
-    return new Observable<any>((observer) => {
-      this.socket?.on('message', (messageData: any) => {
-        console.log('Recieved message:', messageData);
-        if (messageData.room === selectedRoom) {
-          observer.next(messageData);
-        }
+  getMessages(): Observable<{ message: string; room: string }> {
+    return new Observable<{ message: string; room: string }>((observer) => {
+      this.socket?.on('message', (messageData: { message: string; room: string }) => {
+        console.log('Received message service:', messageData);
+        observer.next(messageData);
       });
     });
   }
-
 
   public joinRoom(room: string):void{
     console.log('joinRoom service', room);
