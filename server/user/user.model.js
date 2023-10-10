@@ -21,7 +21,6 @@ const UserModel = {
         type: String,
         enum: Object.values(Roles),
     },
-
 }
 
 module.exports = model( 'User',new Schema(UserModel));
