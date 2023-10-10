@@ -40,7 +40,7 @@ const add_message_to_room = async (roomId, senderId, content) => {
       content,
     };
 
-    // Add the message to the room's messages array
+    // Add the file-upload to the room's messages array
     const updatedRoom = await RoomModel.findByIdAndUpdate(
       roomId,
       { $push: { messages: message } },

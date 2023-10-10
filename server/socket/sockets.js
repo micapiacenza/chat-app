@@ -1,11 +1,9 @@
 const { list_rooms_array } = require('../room/room.controller');
-const mongoose = require('mongoose');
 
 module.exports = {
   connect: function (io) {
     var roomNames = [];
     let rooms = list_rooms_array().then((data) => {
-      console.log('DATA!!!!', data);
       data.forEach((room) => {
         roomNames.push(room.name);
       });
@@ -13,7 +11,6 @@ module.exports = {
     });
     const users = {};
 
-    console.log('ROMS!!!!', rooms);
     let socketRoom = [];
     let socketRoomNum = []; // How may ppl in a group
 
@@ -24,15 +21,15 @@ module.exports = {
       console.log('User connected');
 
       socket.on('message', (message, room) => {
-        console.log('Received message 1:', message);
+        console.log('Received file-upload 1:', message);
         console.log('Received room 1:', room);
 
         // Iterate through socketRoom array to find the room associated with the user
         for (let i = 0; i < socketRoom.length; i++) {
           if (socketRoom[i][0] === socket.id) {
-            // Check if the message is for the user's current room
+            // Check if the file-upload is for the user's current room
             if (socketRoom[i][1] === room) {
-              console.log('Received message 2:', message);
+              console.log('Received file-upload 2:', message);
               console.log('Received room 2:', room);
               io.to(room).emit('message', { message: message, room: room });
             }

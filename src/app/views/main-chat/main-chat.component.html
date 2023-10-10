@@ -34,6 +34,10 @@
                 <div class="bg-light rounded p-2 ms-2">
                   {{ message.message }}
                 </div>
+                <ng-container *ngIf="message.fileUrl">
+                  <a [href]="message.fileUrl" target="_blank">View File</a>
+                </ng-container>
+
               </div>
             </div>
 
@@ -49,6 +53,7 @@
               <button (click)="sendMessage()" class="btn btn-info text-light" [disabled]="!selectedGroup && !selectedGroup">
                 Send
               </button>
+              <input type="file" (change)="onFileSelected($event)"/>
             </div>
           </div>
         </div>

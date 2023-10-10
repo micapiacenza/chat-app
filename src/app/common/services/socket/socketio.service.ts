@@ -37,6 +37,14 @@ export class SocketioService {
     });
   }
 
+  sendMessageWithFile(message: string, formData: FormData, room: string) {
+    // Append the file-upload and room to the FormData object
+    formData.append('message', message);
+    formData.append('room', room);
+
+    return this.http.post('upload', formData);
+  }
+
   public joinRoom(room: string):void{
     console.log('joinRoom service', room);
     this.socket?.emit("joinRoom", room);

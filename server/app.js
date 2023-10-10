@@ -15,6 +15,8 @@ const io = require('socket.io')(http, {
 });
 
 const sockets = require('./socket/sockets');
+const fileUploadRoutes = require('./file-upload/file-update.routes');
+
 
 const PORT = 3001;
 
@@ -26,6 +28,8 @@ app.use('/', routes);
 
 // setup Socket
 sockets.connect(io);
+// File upload routes
+fileUploadRoutes(app, io);
 
 // Connect to MongoDB before starting the Express server
 connectToMongoDB()

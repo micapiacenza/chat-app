@@ -36,12 +36,12 @@ export class CreateAccountComponent implements OnInit {
     this.authService.register(userCredentials).subscribe(
       (response: any) => {
         console.log('User registered successfully', response);
-        // Redirect the user or show a success message
+        // Redirect the user or show a success file-upload
       },
       (error: any) => {
         console.error('Error registering user', error);
         this.errorMessage = 'Registration failed. Please try again.';
-        // Handle errors and show an error message to the user
+        // Handle errors and show an error file-upload to the user
       });
   }
 }
