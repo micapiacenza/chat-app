@@ -23,19 +23,22 @@ export class SocketioService {
     console.log('initSocket', this.socket);
   }
 
-  sendMessage(message: string): void {
-    console.log('Sending message fe', message);
-    this.socket?.emit('message', message);
+  sendMessage(message: string, room: any): void {
+    console.log('Sending message: ', message, room);
+    this.socket?.emit('message', message, room);
   }
 
-  getMessages(): Observable<string> {
-    return new Observable<string>((observer) => {
-      this.socket?.on('message', (message: string) => {
-        console.log('Received message fe', message);
-        observer.next(message);
+  getMessages(selectedRoom: string): Observable<any> {
+    return new Observable<any>((observer) => {
+      this.socket?.on('message', (messageData: any) => {
+        console.log('Recieved message:', messageData);
+        if (messageData.room === selectedRoom) {
+          observer.next(messageData);
+        }
       });
     });
   }
+
 
   public joinRoom(room: string):void{
     console.log('joinRoom service', room);
@@ -53,5 +56,4 @@ export class SocketioService {
     this.socket?.on('roomList',res=>next(res));
 
   }
-
 }
